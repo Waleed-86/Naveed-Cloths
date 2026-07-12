@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
+
+@theme {
+  /* Warm, tailoring-inspired palette — not generic SaaS grey */
+  --color-softwhite: #FAF8F4;
+  --color-lightgrey: #E7E1D8;
+  --color-charcoal: #2A2825;
+  --color-mattenblack: #16140F;
+  --color-accent: #A9793C;   /* antique gold — nod to zari/gota embroidery thread */
+  --color-maroon: #7A2331;   /* secondary accent — traditional fabric dye, used sparingly */
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-softwhite text-charcoal antialiased;
+  font-family: var(--font-sans);
+  font-size: 15px;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Layout */
+.container-shop {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Signature motif — a thin stitched divider, used sparingly under section
+   headings and around key content blocks. Evokes hand-stitching without
+   being a literal/cliché icon. */
+.stitch-divider {
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-accent) 0px,
+    var(--color-accent) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* Buttons */
+.btn-primary {
+  @apply bg-charcoal text-white px-6 py-3 rounded-sm text-sm font-medium tracking-wide
+         hover:bg-mattenblack transition-colors duration-200;
+}
+
+.btn-outline {
+  @apply border border-charcoal text-charcoal px-6 py-3 rounded-sm text-sm font-medium tracking-wide
+         hover:bg-charcoal hover:text-white transition-colors duration-200;
+}
+
+.btn-accent {
+  @apply text-white px-6 py-3 rounded-sm text-sm font-medium tracking-wide transition-colors duration-200;
+  background-color: var(--color-accent);
+}
+.btn-accent:hover {
+  background-color: #8f6530;
+}
+
+/* Form elements — shared across Login/Register/Checkout */
+.field-label {
+  @apply block text-xs font-medium uppercase tracking-wider text-charcoal/60 mb-1.5;
+}
+
+.field-input {
+  @apply w-full bg-white border border-lightgrey rounded-sm px-3.5 py-3 text-sm text-charcoal
+         placeholder:text-charcoal/30
+         focus:outline-none focus:border-accent focus:ring-1;
+  transition: border-color 0.15s ease;
+}
+.field-input:focus {
+  --tw-ring-color: var(--color-accent);
+}
+
+.field-error {
+  @apply text-xs mt-1;
+  color: var(--color-maroon);
+}
+
+/* Card surface — used for auth forms, product cards, checkout summary */
+.card-surface {
+  @apply bg-white border border-lightgrey rounded-md;
+  box-shadow: 0 1px 3px rgba(22, 20, 15, 0.04), 0 8px 24px -12px rgba(22, 20, 15, 0.08);
+}
