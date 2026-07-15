@@ -1,6 +1,9 @@
-import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar.jsx'
 import Footer from './components/layout/Footer.jsx'
+import ScrollToTopButton from './components/layout/ScrollToTopButton.jsx'
+import Home from './pages/Home.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -15,11 +18,17 @@ function Placeholder({ label }) {
 }
 
 export default function App() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
   return (
     <>
       <Navbar />
       <Routes>
-      <Route path="/" element={<Placeholder label="Home" />} />
+      <Route path="/" element={<Home />} />
       <Route path="/men" element={<Placeholder label="Men's Collection" />} />
       <Route path="/women" element={<Placeholder label="Women's Collection" />} />
       <Route path="/new-arrivals" element={<Placeholder label="New Arrivals" />} />
@@ -44,6 +53,7 @@ export default function App() {
       <Route path="*" element={<Placeholder label="404 — Page Not Found" />} />
       </Routes>
       <Footer />
+      <ScrollToTopButton />
     </>
   )
 }
