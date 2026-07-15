@@ -1,100 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap');
+@import url('https://fonts.cdnfonts.com/css/general-sans');
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap');
 
 @theme {
-  /* Warm, tailoring-inspired palette — not generic SaaS grey */
-  --color-softwhite: #FAF8F4;
-  --color-lightgrey: #E7E1D8;
-  --color-charcoal: #2A2825;
-  --color-mattenblack: #16140F;
-  --color-accent: #A9793C;   /* antique gold — nod to zari/gota embroidery thread */
-  --color-maroon: #7A2331;   /* secondary accent — traditional fabric dye, used sparingly */
+  /* Brand palette — deep jewel tones drawn from bridal/formal fabric */
+  --color-ink: #1C1A1E;
+  --color-ink-soft: #2A2730;
+  --color-ivory: #FAF6F0;
+  --color-ivory-deep: #F0E9DD;
+  --color-emerald: #0F3D2E;
+  --color-emerald-light: #175943;
+  --color-emerald-dark: #0A2B20;
+  --color-gold: #B8925A;
+  --color-gold-light: #D4B888;
+  --color-gold-dark: #8F6D3F;
+  --color-rani: #7A1F3D;
+  --color-rani-light: #9C2C4F;
+  --color-stone: #8A8378;
+  --color-stone-light: #C4BEB2;
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Typography */
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-body: "General Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --text-display-xl: 4.5rem;
+  --text-display-xl--line-height: 1.05;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-lg: 3.25rem;
+  --text-display-lg--line-height: 1.08;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-md: 2.25rem;
+  --text-display-md--line-height: 1.15;
+  --text-display-md--letter-spacing: -0.01em;
+
+  --tracking-widest2: 0.25em;
+
+  --ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shadow-card: 0 1px 2px rgba(28,26,30,0.04), 0 8px 24px rgba(28,26,30,0.06);
+  --shadow-cardHover: 0 4px 12px rgba(28,26,30,0.08), 0 16px 40px rgba(28,26,30,0.10);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  @apply bg-softwhite text-charcoal antialiased;
-  font-family: var(--font-sans);
-  font-size: 15px;
-}
-
-@media (min-width: 768px) {
   body {
-    font-size: 16px;
+    @apply bg-ivory text-ink font-body antialiased;
+  }
+
+  html.dark body {
+    @apply bg-ink text-ivory;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-medium;
+  }
+
+  ::selection {
+    @apply bg-gold/30 text-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
   }
 }
 
-h1, h2, h3, .font-display {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+@layer components {
+  /* Signature element: a hand-stitched thread divider, evoking embroidery */
+  .thread-divider {
+    @apply relative h-[9px] w-full text-gold bg-repeat-x bg-left;
+    background-image: repeating-linear-gradient(90deg, currentColor 0, currentColor 4px, transparent 4px, transparent 9px);
+    background-size: 9px 1px;
+    background-position: center;
+  }
+
+  .thread-underline {
+    @apply relative inline-block;
+  }
+
+  .thread-underline::after {
+    content: '';
+    @apply absolute left-0 -bottom-1 h-[2px] w-0 text-gold bg-repeat-x transition-all duration-500;
+    transition-timing-function: var(--ease-silk);
+    background-image: repeating-linear-gradient(90deg, currentColor 0, currentColor 3px, transparent 3px, transparent 7px);
+    background-size: 7px 1px;
+  }
+
+  .thread-underline:hover::after {
+    @apply w-full;
+  }
+
+  .eyebrow {
+    @apply text-xs font-body font-semibold uppercase text-gold-dark;
+    letter-spacing: var(--tracking-widest2);
+  }
+
+  .container-premium {
+    @apply mx-auto w-full max-w-[1400px] px-6 md:px-10 lg:px-16;
+  }
 }
 
-/* Layout */
-.container-shop {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-}
-
-/* Signature motif — a thin stitched divider, used sparingly under section
-   headings and around key content blocks. Evokes hand-stitching without
-   being a literal/cliché icon. */
-.stitch-divider {
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    to right,
-    var(--color-accent) 0px,
-    var(--color-accent) 6px,
-    transparent 6px,
-    transparent 12px
-  );
-}
-
-/* Buttons */
-.btn-primary {
-  @apply bg-charcoal text-white px-6 py-3 rounded-sm text-sm font-medium tracking-wide
-         hover:bg-mattenblack transition-colors duration-200;
-}
-
-.btn-outline {
-  @apply border border-charcoal text-charcoal px-6 py-3 rounded-sm text-sm font-medium tracking-wide
-         hover:bg-charcoal hover:text-white transition-colors duration-200;
-}
-
-.btn-accent {
-  @apply text-white px-6 py-3 rounded-sm text-sm font-medium tracking-wide transition-colors duration-200;
-  background-color: var(--color-accent);
-}
-.btn-accent:hover {
-  background-color: #8f6530;
-}
-
-/* Form elements — shared across Login/Register/Checkout */
-.field-label {
-  @apply block text-xs font-medium uppercase tracking-wider text-charcoal/60 mb-1.5;
-}
-
-.field-input {
-  @apply w-full bg-white border border-lightgrey rounded-sm px-3.5 py-3 text-sm text-charcoal
-         placeholder:text-charcoal/30
-         focus:outline-none focus:border-accent focus:ring-1;
-  transition: border-color 0.15s ease;
-}
-.field-input:focus {
-  --tw-ring-color: var(--color-accent);
-}
-
-.field-error {
-  @apply text-xs mt-1;
-  color: var(--color-maroon);
-}
-
-/* Card surface — used for auth forms, product cards, checkout summary */
-.card-surface {
-  @apply bg-white border border-lightgrey rounded-md;
-  box-shadow: 0 1px 3px rgba(22, 20, 15, 0.04), 0 8px 24px -12px rgba(22, 20, 15, 0.08);
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
