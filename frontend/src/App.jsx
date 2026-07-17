@@ -6,6 +6,7 @@ import ScrollToTopButton from './components/layout/ScrollToTopButton.jsx'
 import Home from './pages/Home.jsx'
 import Men from './pages/Men.jsx'
 import Women from './pages/Women.jsx'
+import ProductDetail from './pages/ProductDetail.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -36,7 +37,7 @@ export default function App() {
       <Route path="/new-arrivals" element={<Placeholder label="New Arrivals" />} />
       <Route path="/best-sellers" element={<Placeholder label="Best Sellers" />} />
       <Route path="/sale" element={<Placeholder label="Sale" />} />
-      <Route path="/product/:slug" element={<Placeholder label="Product" />} />
+      <Route path="/product/:slug" element={<ProductDetail />} />
       <Route path="/about" element={<Placeholder label="About Us" />} />
       <Route path="/contact" element={<Placeholder label="Contact" />} />
       <Route path="/cart" element={<Placeholder label="Cart" />} />
