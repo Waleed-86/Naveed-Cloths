@@ -4,6 +4,8 @@ import Navbar from './components/layout/Navbar.jsx'
 import Footer from './components/layout/Footer.jsx'
 import ScrollToTopButton from './components/layout/ScrollToTopButton.jsx'
 import Home from './pages/Home.jsx'
+import Men from './pages/Men.jsx'
+import Women from './pages/Women.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -29,8 +31,8 @@ export default function App() {
       <Navbar />
       <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/men" element={<Placeholder label="Men's Collection" />} />
-      <Route path="/women" element={<Placeholder label="Women's Collection" />} />
+      <Route path="/men" element={<Men />} />
+      <Route path="/women" element={<Women />} />
       <Route path="/new-arrivals" element={<Placeholder label="New Arrivals" />} />
       <Route path="/best-sellers" element={<Placeholder label="Best Sellers" />} />
       <Route path="/sale" element={<Placeholder label="Sale" />} />
