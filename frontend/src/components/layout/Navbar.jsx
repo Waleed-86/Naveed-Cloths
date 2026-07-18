@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X, Search, Heart, User, ShoppingBag, Sun, Moon } from 'lucide-react'
+import { useCartStore, selectCartCount } from '../../store/useCartStore.js'
+import { useWishlistStore, selectWishlistCount } from '../../store/useWishlistStore.js'
 
 const NAV_LINKS = [
   { label: 'Men', to: '/men' },
@@ -10,11 +12,9 @@ const NAV_LINKS = [
   { label: 'Sale', to: '/sale' },
 ]
 
-// TODO: replace with real counts from the cart/wishlist store once it's built
-const CART_COUNT = 0
-const WISHLIST_COUNT = 0
-
 export default function Navbar() {
+  const cartCount = useCartStore(selectCartCount)
+  const wishlistCount = useWishlistStore(selectWishlistCount)
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDark, setIsDark] = useState(
@@ -90,17 +90,17 @@ export default function Navbar() {
             </Link>
             <Link to="/wishlist" aria-label="Wishlist" className="relative hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex">
               <Heart size={20} strokeWidth={1.5} />
-              {WISHLIST_COUNT > 0 && (
+              {wishlistCount > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rani text-[10px] text-ivory">
-                  {WISHLIST_COUNT}
+                  {wishlistCount}
                 </span>
               )}
             </Link>
             <Link to="/cart" aria-label="Cart" className="relative rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft">
               <ShoppingBag size={20} strokeWidth={1.5} />
-              {CART_COUNT > 0 && (
+              {cartCount > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rani text-[10px] text-ivory">
-                  {CART_COUNT}
+                  {cartCount}
                 </span>
               )}
             </Link>

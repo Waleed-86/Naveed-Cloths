@@ -1,9 +1,12 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Eye } from 'lucide-react'
+import { useCartStore } from '../../store/useCartStore.js'
+import { useWishlistStore, selectIsWishlisted } from '../../store/useWishlistStore.js'
 
 export default function ProductCard({ product }) {
-  const [wishlisted, setWishlisted] = useState(false)
+  const addItem = useCartStore((s) => s.addItem)
+  const toggleWishlistItem = useWishlistStore((s) => s.toggleItem)
+  const wishlisted = useWishlistStore(selectIsWishlisted(product.id))
   const hasDiscount = Boolean(product.discountPrice)
   const percentOff = hasDiscount
     ? Math.round(100 - (product.discountPrice / product.price) * 100)
@@ -11,8 +14,7 @@ export default function ProductCard({ product }) {
 
   function toggleWishlist(e) {
     e.preventDefault()
-    // TODO: replace with real wishlist store/API call once built
-    setWishlisted((w) => !w)
+    toggleWishlistItem(product)
   }
 
   function quickView(e) {
@@ -22,7 +24,11 @@ export default function ProductCard({ product }) {
 
   function addToCart(e) {
     e.preventDefault()
-    // TODO: wire to cart store once built
+    addItem(product, {
+      size: product.sizes?.[0] ?? null,
+      color: product.colors?.[0] ?? null,
+      quantity: 1,
+    })
   }
 
   return (

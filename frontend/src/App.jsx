@@ -7,6 +7,10 @@ import Home from './pages/Home.jsx'
 import Men from './pages/Men.jsx'
 import Women from './pages/Women.jsx'
 import ProductDetail from './pages/ProductDetail.jsx'
+import Cart from './pages/Cart.jsx'
+import Wishlist from './pages/Wishlist.jsx'
+import Checkout from './pages/Checkout.jsx'
+import OrderConfirmation from './pages/OrderConfirmation.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -40,10 +44,10 @@ export default function App() {
       <Route path="/product/:slug" element={<ProductDetail />} />
       <Route path="/about" element={<Placeholder label="About Us" />} />
       <Route path="/contact" element={<Placeholder label="Contact" />} />
-      <Route path="/cart" element={<Placeholder label="Cart" />} />
-      <Route path="/wishlist" element={<Placeholder label="Wishlist" />} />
-      <Route path="/checkout" element={<Placeholder label="Checkout" />} />
-      <Route path="/order-confirmation/:orderNumber" element={<Placeholder label="Order Confirmation" />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
       <Route path="/track-order" element={<Placeholder label="Track Order" />} />
       <Route path="/login" element={<Placeholder label="Login" />} />
       <Route path="/register" element={<Placeholder label="Register" />} />

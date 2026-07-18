@@ -5,6 +5,8 @@ import ImageGallery from '../components/product/ImageGallery.jsx'
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import RatingStars from '../components/ui/RatingStars.jsx'
 import QuantitySelector from '../components/ui/QuantitySelector.jsx'
+import { useCartStore } from '../store/useCartStore.js'
+import { useWishlistStore, selectIsWishlisted } from '../store/useWishlistStore.js'
 import { MOCK_PRODUCTS } from '../data/mockProducts.js'
 
 // Placeholder reviews until a real reviews API/table exists
@@ -34,12 +36,15 @@ const ACCORDION_SECTIONS = [
 export default function ProductDetail() {
   const { slug } = useParams()
   const product = MOCK_PRODUCTS.find((p) => p.slug === slug)
+  const addItem = useCartStore((s) => s.addItem)
+  const toggleWishlistItem = useWishlistStore((s) => s.toggleItem)
+  const wishlisted = useWishlistStore(product ? selectIsWishlisted(product.id) : () => false)
 
   const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null)
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] ?? null)
   const [quantity, setQuantity] = useState(1)
-  const [wishlisted, setWishlisted] = useState(false)
   const [openSection, setOpenSection] = useState(0)
+  const [addedMessage, setAddedMessage] = useState(false)
 
   if (!product) {
     return (
@@ -136,11 +141,18 @@ export default function ProductDetail() {
           {/* Quantity + actions */}
           <div className="flex flex-wrap items-center gap-3">
             <QuantitySelector quantity={quantity} onChange={setQuantity} max={product.stock} />
-            <button className="flex-1 bg-emerald px-8 py-3.5 text-sm font-medium uppercase tracking-wide text-ivory transition-colors hover:bg-emerald-light">
-              Add to Cart
+            <button
+              onClick={() => {
+                addItem(product, { size: selectedSize, color: selectedColor, quantity })
+                setAddedMessage(true)
+                setTimeout(() => setAddedMessage(false), 2000)
+              }}
+              className="flex-1 bg-emerald px-8 py-3.5 text-sm font-medium uppercase tracking-wide text-ivory transition-colors hover:bg-emerald-light"
+            >
+              {addedMessage ? 'Added ✓' : 'Add to Cart'}
             </button>
             <button
-              onClick={() => setWishlisted((w) => !w)}
+              onClick={() => toggleWishlistItem(product)}
               aria-label="Toggle wishlist"
               className="flex h-[50px] w-[50px] shrink-0 items-center justify-center border border-stone-light/60 hover:border-rani"
             >
