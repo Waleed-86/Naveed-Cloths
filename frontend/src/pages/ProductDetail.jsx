@@ -7,7 +7,8 @@ import RatingStars from '../components/ui/RatingStars.jsx'
 import QuantitySelector from '../components/ui/QuantitySelector.jsx'
 import { useCartStore } from '../store/useCartStore.js'
 import { useWishlistStore, selectIsWishlisted } from '../store/useWishlistStore.js'
-import { MOCK_PRODUCTS } from '../data/mockProducts.js'
+import { useProducts } from '../hooks/useProducts.js'
+import { useProduct } from '../hooks/useProduct.js'
 
 // Placeholder reviews until a real reviews API/table exists
 const MOCK_REVIEWS = [
@@ -19,13 +20,13 @@ const ACCORDION_SECTIONS = [
   {
     title: 'Description',
     content: (p) =>
-      `${p.name} — a ${p.fabric.toLowerCase()} piece crafted for both comfort and presence. ${
+      `${p.name} — a ${p.fabric?.toLowerCase() ?? 'quality'} piece crafted for both comfort and presence. ${
         p.quality ? `Part of our ${p.quality.toLowerCase()} line.` : ''
       }`,
   },
   {
     title: 'Fabric & Care',
-    content: (p) => `Fabric: ${p.fabric}. Hand wash or dry clean recommended. Iron on low heat, avoid direct sunlight when drying to preserve colour.`,
+    content: (p) => `Fabric: ${p.fabric ?? 'N/A'}. Hand wash or dry clean recommended. Iron on low heat, avoid direct sunlight when drying to preserve colour.`,
   },
   {
     title: 'Delivery Information',
@@ -35,18 +36,34 @@ const ACCORDION_SECTIONS = [
 
 export default function ProductDetail() {
   const { slug } = useParams()
-  const product = MOCK_PRODUCTS.find((p) => p.slug === slug)
+  const { product, loading, error } = useProduct(slug)
+
   const addItem = useCartStore((s) => s.addItem)
   const toggleWishlistItem = useWishlistStore((s) => s.toggleItem)
   const wishlisted = useWishlistStore(product ? selectIsWishlisted(product.id) : () => false)
 
-  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? null)
-  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] ?? null)
+  const [selectedSize, setSelectedSize] = useState(null)
+  const [selectedColor, setSelectedColor] = useState(null)
   const [quantity, setQuantity] = useState(1)
   const [openSection, setOpenSection] = useState(0)
   const [addedMessage, setAddedMessage] = useState(false)
 
-  if (!product) {
+  // Related products — same category, excluding the current item.
+  // TODO: replace with a real recommendation endpoint once one exists.
+  const relatedParams = product ? { category: product.category, per_page: 5 } : null
+  const { products: relatedRaw } = useProducts(relatedParams)
+  const related = relatedRaw.filter((p) => p.id !== product?.id).slice(0, 4)
+  const frequentlyBought = relatedRaw.filter((p) => p.id !== product?.id).slice(0, 2)
+
+  if (loading) {
+    return (
+      <div className="container-premium flex min-h-[50vh] items-center justify-center">
+        <p className="text-sm text-stone">Loading product…</p>
+      </div>
+    )
+  }
+
+  if (error || !product) {
     return (
       <div className="container-premium flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
         <h1 className="font-display text-2xl">Product not found</h1>
@@ -57,12 +74,8 @@ export default function ProductDetail() {
 
   const hasDiscount = Boolean(product.discountPrice)
   const avgRating = MOCK_REVIEWS.reduce((sum, r) => sum + r.rating, 0) / MOCK_REVIEWS.length
-
-  const related = MOCK_PRODUCTS.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  ).slice(0, 4)
-
-  const frequentlyBought = MOCK_PRODUCTS.filter((p) => p.id !== product.id).slice(0, 2)
+  const activeSize = selectedSize ?? product.sizes?.[0] ?? null
+  const activeColor = selectedColor ?? product.colors?.[0] ?? null
 
   return (
     <div className="container-premium py-10">
@@ -108,7 +121,7 @@ export default function ProductDetail() {
                     aria-label={`Select colour ${color}`}
                     style={{ backgroundColor: color }}
                     className={`h-9 w-9 rounded-full border-2 transition-all ${
-                      selectedColor === color ? 'border-gold scale-110' : 'border-transparent'
+                      activeColor === color ? 'border-gold scale-110' : 'border-transparent'
                     }`}
                   />
                 ))}
@@ -126,7 +139,7 @@ export default function ProductDetail() {
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`min-w-[44px] border px-3 py-2 text-xs font-medium uppercase ${
-                      selectedSize === size
+                      activeSize === size
                         ? 'border-emerald bg-emerald text-ivory'
                         : 'border-stone-light/60 hover:border-emerald'
                     }`}
@@ -143,7 +156,7 @@ export default function ProductDetail() {
             <QuantitySelector quantity={quantity} onChange={setQuantity} max={product.stock} />
             <button
               onClick={() => {
-                addItem(product, { size: selectedSize, color: selectedColor, quantity })
+                addItem(product, { size: activeSize, color: activeColor, quantity })
                 setAddedMessage(true)
                 setTimeout(() => setAddedMessage(false), 2000)
               }}

@@ -1,19 +1,10 @@
-import { useState, useEffect } from 'react'
 import ProductGrid from '../components/product/ProductGrid.jsx'
-import { MOCK_PRODUCTS } from '../data/mockProducts.js'
+import { useProducts } from '../hooks/useProducts.js'
 
 const TIERS = ['Premium Quality', 'Medium Quality', 'Budget Friendly']
 
 export default function Men() {
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    // Simulated fetch delay — replace with real GET /api/products?category=men
-    const timer = setTimeout(() => setLoading(false), 600)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const menProducts = MOCK_PRODUCTS.filter((p) => p.category === 'men')
+  const { products, loading, error } = useProducts({ category: 'men', per_page: 100 })
 
   return (
     <div>
@@ -25,10 +16,15 @@ export default function Men() {
           finish that fits your budget without compromising on cut.
         </p>
         <div className="thread-divider my-8 max-w-[140px]" />
+        {error && (
+          <p className="mb-6 text-sm text-rani">
+            Couldn't load products right now — is the backend running at the configured API URL?
+          </p>
+        )}
       </div>
 
       {TIERS.map((tier) => {
-        const tierProducts = menProducts.filter((p) => p.quality === tier)
+        const tierProducts = products.filter((p) => p.quality === tier)
         if (!loading && tierProducts.length === 0) return null
 
         return (

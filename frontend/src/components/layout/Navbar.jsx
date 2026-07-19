@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Menu, X, Search, Heart, User, ShoppingBag, Sun, Moon } from 'lucide-react'
 import { useCartStore, selectCartCount } from '../../store/useCartStore.js'
 import { useWishlistStore, selectWishlistCount } from '../../store/useWishlistStore.js'
+import { useAuthStore, selectIsAuthenticated } from '../../store/useAuthStore.js'
 
 const NAV_LINKS = [
   { label: 'Men', to: '/men' },
@@ -15,6 +16,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const cartCount = useCartStore(selectCartCount)
   const wishlistCount = useWishlistStore(selectWishlistCount)
+  const isAuthenticated = useAuthStore(selectIsAuthenticated)
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDark, setIsDark] = useState(
@@ -85,7 +87,11 @@ export default function Navbar() {
             >
               {isDark ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
             </button>
-            <Link to="/account" aria-label="Account" className="hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex">
+            <Link
+              to={isAuthenticated ? '/account' : '/login'}
+              aria-label={isAuthenticated ? 'Account' : 'Sign in'}
+              className="hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex"
+            >
               <User size={20} strokeWidth={1.5} />
             </Link>
             <Link to="/wishlist" aria-label="Wishlist" className="relative hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex">

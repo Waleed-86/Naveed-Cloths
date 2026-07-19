@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import ProductGrid from '../components/product/ProductGrid.jsx'
+import { useProducts } from '../hooks/useProducts.js'
 
 const CATEGORIES = [
   {
@@ -22,6 +24,8 @@ const CATEGORIES = [
 ]
 
 export default function Home() {
+  const { products: featured, loading } = useProducts({ is_new: 1, per_page: 4 })
+
   return (
     <div>
       {/* Hero */}
@@ -91,6 +95,22 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Featured / New Arrivals */}
+      {(loading || featured.length > 0) && (
+        <section className="container-premium pb-20 md:pb-28">
+          <div className="mb-12 flex items-end justify-between">
+            <div>
+              <p className="eyebrow">Just In</p>
+              <h2 className="mt-2 font-display text-display-md">New Arrivals</h2>
+            </div>
+            <Link to="/new-arrivals" className="thread-underline hidden text-sm uppercase tracking-wide text-stone sm:inline">
+              View All →
+            </Link>
+          </div>
+          <ProductGrid products={featured} loading={loading} skeletonCount={4} />
+        </section>
+      )}
     </div>
   )
 }

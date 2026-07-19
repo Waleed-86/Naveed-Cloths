@@ -1,23 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import ProductGrid from '../components/product/ProductGrid.jsx'
-import { MOCK_PRODUCTS } from '../data/mockProducts.js'
+import { useProducts, PIECE_VALUES, STITCH_VALUES, WORK_VALUES } from '../hooks/useProducts.js'
 
 const STEPS = [
-  {
-    key: 'pieces',
-    question: 'Choose your piece count',
-    options: ['2 Piece', '3 Piece'],
-  },
-  {
-    key: 'stitching',
-    question: 'Choose stitching',
-    options: ['Stitched', 'Unstitched'],
-  },
-  {
-    key: 'work',
-    question: 'Choose the finish',
-    options: ['Simple Printed', 'Embroidered / Fancy Work'],
-  },
+  { key: 'pieces', question: 'Choose your piece count', options: ['2 Piece', '3 Piece'] },
+  { key: 'stitching', question: 'Choose stitching', options: ['Stitched', 'Unstitched'] },
+  { key: 'work', question: 'Choose the finish', options: ['Simple Printed', 'Embroidered / Fancy Work'] },
 ]
 
 export default function Women() {
@@ -26,16 +14,17 @@ export default function Women() {
 
   const isComplete = answers.pieces && answers.stitching && answers.work
 
-  const matchedProducts = useMemo(() => {
-    if (!isComplete) return []
-    return MOCK_PRODUCTS.filter(
-      (p) =>
-        p.category === 'women' &&
-        p.pieces === answers.pieces &&
-        p.stitching === answers.stitching &&
-        p.work === answers.work
-    )
-  }, [answers, isComplete])
+  const apiParams = isComplete
+    ? {
+        category: 'women',
+        pieces: PIECE_VALUES[answers.pieces],
+        stitching: STITCH_VALUES[answers.stitching],
+        work_type: WORK_VALUES[answers.work],
+        per_page: 100,
+      }
+    : null
+
+  const { products: matchedProducts, loading, error } = useProducts(apiParams)
 
   function selectOption(key, value) {
     setAnswers((prev) => ({ ...prev, [key]: value }))
@@ -108,7 +97,12 @@ export default function Women() {
               </span>
             ))}
           </div>
-          <ProductGrid products={matchedProducts} />
+          {error && (
+            <p className="mb-4 text-sm text-rani">
+              Couldn't load products right now — is the backend running at the configured API URL?
+            </p>
+          )}
+          <ProductGrid products={matchedProducts} loading={loading} />
         </div>
       )}
     </div>

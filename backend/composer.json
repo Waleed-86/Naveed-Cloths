@@ -10,7 +10,7 @@
         "barryvdh/laravel-dompdf": "*",
         "intervention/image": "*",
         "laravel/framework": "^13.8",
-        "laravel/sanctum": "*",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
         "spatie/laravel-permission": "*",
         "spatie/laravel-query-builder": "^7.3"
