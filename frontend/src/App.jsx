@@ -23,6 +23,10 @@ import About from './pages/About.jsx'
 import Contact from './pages/Contact.jsx'
 import PolicyPage from './pages/PolicyPage.jsx'
 import { POLICY_CONTENT } from './data/policyContent.js'
+import RequireAdmin from './components/auth/RequireAdmin.jsx'
+import AdminLayout from './pages/admin/AdminLayout.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
+import AdminOrders from './pages/admin/AdminOrders.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -85,7 +89,17 @@ export default function App() {
         <Route path="addresses" element={<AddressesPlaceholder />} />
         <Route path="change-password" element={<ChangePasswordPlaceholder />} />
       </Route>
-      <Route path="/admin/*" element={<Placeholder label="Admin Dashboard" />} />
+      <Route
+        path="/admin"
+        element={
+          <RequireAdmin>
+            <AdminLayout />
+          </RequireAdmin>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="orders" element={<AdminOrders />} />
+      </Route>
       <Route path="/privacy-policy" element={<PolicyPage policy={POLICY_CONTENT.privacy} />} />
       <Route path="/terms-and-conditions" element={<PolicyPage policy={POLICY_CONTENT.terms} />} />
       <Route path="/refund-policy" element={<PolicyPage policy={POLICY_CONTENT.refund} />} />
