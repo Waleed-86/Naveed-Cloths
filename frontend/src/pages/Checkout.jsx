@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useCartStore, selectCartSubtotal } from '../store/useCartStore.js'
 import FormInput, { FormField } from '../components/ui/FormInput.jsx'
+import api from '../lib/api.js'
 
 const PROVINCES = ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa', 'Balochistan', 'Gilgit-Baltistan', 'Azad Kashmir', 'Islamabad Capital Territory']
 
@@ -32,6 +33,7 @@ export default function Checkout() {
   })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING
   const total = subtotal + shipping
@@ -53,21 +55,46 @@ export default function Checkout() {
     return Object.keys(next).length === 0
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
+    setSubmitError('')
     if (!validate() || items.length === 0) return
 
     setSubmitting(true)
-    // TODO: replace with POST /api/orders — backend generates the real order
-    // number, saves customer/payment/order details, reduces stock, and
-    // routes to the selected gateway service via the abstraction layer.
-    const orderNumber = `SILA-${Date.now().toString().slice(-6)}`
-    const orderSnapshot = { orderNumber, form, items, total, placedAt: new Date().toISOString() }
+    try {
+      const response = await api.post('/orders', {
+        full_name: form.fullName,
+        phone: form.phone,
+        email: form.email,
+        province: form.province,
+        city: form.city,
+        address: form.address,
+        postal_code: form.postalCode,
+        notes: form.notes || null,
+        payment_method: form.payment,
+        items: items.map((item) => ({
+          product_id: item.productId,
+          quantity: item.quantity,
+          size: item.size,
+          color: item.color,
+        })),
+      })
 
-    setTimeout(() => {
+      const order = response.data.data
       clearCart()
-      navigate(`/order-confirmation/${orderNumber}`, { state: orderSnapshot })
-    }, 600)
+      navigate(`/order-confirmation/${order.order_number}`, {
+        state: { orderNumber: order.order_number, total: Number(order.total), form },
+      })
+    } catch (err) {
+      if (err.response?.status === 422) {
+        const messages = err.response.data.errors
+        setSubmitError(Object.values(messages).flat().join(' '))
+      } else {
+        setSubmitError('Something went wrong placing your order. Please try again.')
+      }
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (items.length === 0) {
@@ -190,6 +217,7 @@ export default function Checkout() {
               <span>Rs. {total.toLocaleString()}</span>
             </div>
           </div>
+          {submitError && <p className="mt-4 text-sm text-rani">{submitError}</p>}
           <button
             type="submit"
             disabled={submitting}

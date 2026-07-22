@@ -15,8 +15,9 @@ import OrderConfirmation from './pages/OrderConfirmation.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import RequireAuth from './components/auth/RequireAuth.jsx'
-import AccountLayout, { OrdersPlaceholder, AddressesPlaceholder, ChangePasswordPlaceholder } from './pages/account/AccountLayout.jsx'
+import AccountLayout, { AddressesPlaceholder, ChangePasswordPlaceholder } from './pages/account/AccountLayout.jsx'
 import Profile from './pages/account/Profile.jsx'
+import Orders from './pages/account/Orders.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -75,7 +76,7 @@ export default function App() {
         }
       >
         <Route index element={<Profile />} />
-        <Route path="orders" element={<OrdersPlaceholder />} />
+        <Route path="orders" element={<Orders />} />
         <Route path="addresses" element={<AddressesPlaceholder />} />
         <Route path="change-password" element={<ChangePasswordPlaceholder />} />
       </Route>
