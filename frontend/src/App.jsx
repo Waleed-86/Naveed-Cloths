@@ -18,6 +18,11 @@ import RequireAuth from './components/auth/RequireAuth.jsx'
 import AccountLayout, { AddressesPlaceholder, ChangePasswordPlaceholder } from './pages/account/AccountLayout.jsx'
 import Profile from './pages/account/Profile.jsx'
 import Orders from './pages/account/Orders.jsx'
+import TrackOrder from './pages/TrackOrder.jsx'
+import About from './pages/About.jsx'
+import Contact from './pages/Contact.jsx'
+import PolicyPage from './pages/PolicyPage.jsx'
+import { POLICY_CONTENT } from './data/policyContent.js'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -58,13 +63,13 @@ export default function App() {
         element={<ProductListPage title="Sale" subtitle="Limited-time offers on select collections." apiParams={{ on_sale: 1 }} />}
       />
       <Route path="/product/:slug" element={<ProductDetail />} />
-      <Route path="/about" element={<Placeholder label="About Us" />} />
-      <Route path="/contact" element={<Placeholder label="Contact" />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
-      <Route path="/track-order" element={<Placeholder label="Track Order" />} />
+      <Route path="/track-order" element={<TrackOrder />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route
@@ -81,10 +86,10 @@ export default function App() {
         <Route path="change-password" element={<ChangePasswordPlaceholder />} />
       </Route>
       <Route path="/admin/*" element={<Placeholder label="Admin Dashboard" />} />
-      <Route path="/privacy-policy" element={<Placeholder label="Privacy Policy" />} />
-      <Route path="/terms-and-conditions" element={<Placeholder label="Terms & Conditions" />} />
-      <Route path="/refund-policy" element={<Placeholder label="Refund Policy" />} />
-      <Route path="/shipping-policy" element={<Placeholder label="Shipping Policy" />} />
+      <Route path="/privacy-policy" element={<PolicyPage policy={POLICY_CONTENT.privacy} />} />
+      <Route path="/terms-and-conditions" element={<PolicyPage policy={POLICY_CONTENT.terms} />} />
+      <Route path="/refund-policy" element={<PolicyPage policy={POLICY_CONTENT.refund} />} />
+      <Route path="/shipping-policy" element={<PolicyPage policy={POLICY_CONTENT.shipping} />} />
       <Route path="*" element={<Placeholder label="404 — Page Not Found" />} />
       </Routes>
       <Footer />

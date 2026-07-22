@@ -120,11 +120,25 @@ class OrderController extends Controller
 
     public function show(Request $request, string $orderNumber)
     {
+        $request->validate([
+            'email' => ['nullable', 'email'],
+        ]);
+
+        if (! $request->user() && ! $request->filled('email')) {
+            abort(422, 'Email is required to look up an order.');
+        }
+
         $order = Order::where('order_number', $orderNumber)
             ->where(function ($q) use ($request) {
-                // Owner can view by auth; guests can view by matching email as a light check
-                $q->where('user_id', $request->user()?->id)
-                    ->orWhere('email', $request->user()?->email);
+                // Logged-in owner can view without extra proof; anyone else
+                // (guest tracking) must supply the exact email the order was
+                // placed under, passed explicitly as ?email=
+                if ($request->user()) {
+                    $q->where('user_id', $request->user()->id);
+                }
+                if ($request->filled('email')) {
+                    $q->orWhere('email', $request->string('email'));
+                }
             })
             ->with('items')
             ->firstOrFail();
