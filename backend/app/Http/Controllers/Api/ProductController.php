@@ -1,81 +1,102 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query()->active()->with(['category', 'images']);
-
-        // /api/products?category=men | women
-        if ($request->filled('category')) {
-            $query->forCategory($request->string('category'));
-        }
-
-        // Men's collection tiers: /api/products?quality=premium
-        if ($request->filled('quality')) {
-            $query->quality($request->string('quality'));
-        }
-
-        // Women's guided flow: /api/products?pieces=3_piece&stitching=stitched&work_type=embroidered
-        if ($request->filled(['pieces', 'stitching', 'work_type'])) {
-            $query->matchingWomensFlow(
-                $request->string('pieces'),
-                $request->string('stitching'),
-                $request->string('work_type')
-            );
-        }
-
-        if ($request->boolean('is_new')) {
-            $query->newArrivals();
-        }
-
-        if ($request->boolean('best_sellers')) {
-            $query->bestSellers();
-        }
-
-        if ($request->boolean('on_sale')) {
-            $query->onSale();
-        }
+        $query = Product::query()->with('category');
 
         if ($request->filled('search')) {
-            $term = '%'.$request->string('search').'%';
-            $query->where(fn ($q) => $q->where('name', 'like', $term)->orWhere('fabric', 'like', $term));
+            $query->where('name', 'like', '%'.$request->string('search').'%');
         }
 
-        // Basic price range filter: ?min_price=1000&max_price=10000
-        if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->float('min_price'));
-        }
-        if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->float('max_price'));
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->integer('category_id'));
         }
 
-        $sort = $request->string('sort', 'newest');
-        match ((string) $sort) {
-            'price_asc' => $query->orderBy('price', 'asc'),
-            'price_desc' => $query->orderBy('price', 'desc'),
-            default => $query->latest(),
-        };
-
-        $products = $query->paginate($request->integer('per_page', 12));
-
-        return ProductResource::collection($products);
+        return response()->json($query->latest()->paginate($request->integer('per_page', 20)));
     }
 
-    public function show(string $slug)
+    public function show(Product $product)
     {
-        $product = Product::where('slug', $slug)
-            ->active()
-            ->with(['category', 'images'])
-            ->firstOrFail();
+        return response()->json(['data' => $product->load('category')]);
+    }
 
-        return new ProductResource($product);
+    public function store(Request $request)
+    {
+        $validated = $this->validated($request);
+        $validated['slug'] = $this->uniqueSlug($validated['name']);
+
+        $product = Product::create($validated);
+
+        return response()->json(['data' => $product->load('category')], 201);
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        $validated = $this->validated($request, $product->id);
+
+        // Only regenerate the slug if the name actually changed, so existing
+        // product URLs (already shared/bookmarked) don't silently break.
+        if ($validated['name'] !== $product->name) {
+            $validated['slug'] = $this->uniqueSlug($validated['name'], $product->id);
+        }
+
+        $product->update($validated);
+
+        return response()->json(['data' => $product->fresh('category')]);
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete(); // soft delete — product model uses SoftDeletes
+
+        return response()->json(['message' => 'Product deleted.']);
+    }
+
+    private function validated(Request $request, ?int $ignoreId = null): array
+    {
+        return $request->validate([
+            'category_id' => ['required', 'exists:categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'sku' => ['required', 'string', 'max:100', 'unique:products,sku,'.($ignoreId ?? 'NULL').',id'],
+            'description' => ['nullable', 'string'],
+            'fabric' => ['nullable', 'string', 'max:255'],
+            'care_instructions' => ['nullable', 'string'],
+            'quality' => ['nullable', 'in:premium,medium,budget'],
+            'pieces' => ['nullable', 'in:2_piece,3_piece'],
+            'stitching' => ['nullable', 'in:stitched,unstitched'],
+            'work_type' => ['nullable', 'in:simple_printed,embroidered'],
+            'price' => ['required', 'numeric', 'min:0'],
+            'discount_price' => ['nullable', 'numeric', 'min:0', 'lt:price'],
+            'stock' => ['required', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
+            'sizes' => ['nullable', 'array'],
+            'colors' => ['nullable', 'array'],
+            'is_new' => ['boolean'],
+            'is_best_seller' => ['boolean'],
+            'is_active' => ['boolean'],
+        ]);
+    }
+
+    private function uniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($name);
+        $slug = $base;
+        $i = 1;
+
+        while (Product::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = "{$base}-{$i}";
+            $i++;
+        }
+
+        return $slug;
     }
 }

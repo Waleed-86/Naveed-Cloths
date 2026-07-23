@@ -27,6 +27,12 @@ import RequireAdmin from './components/auth/RequireAdmin.jsx'
 import AdminLayout from './pages/admin/AdminLayout.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx'
+import AdminProducts from './pages/admin/AdminProducts.jsx'
+import AdminProductForm from './pages/admin/AdminProductForm.jsx'
+import AdminCategories from './pages/admin/AdminCategories.jsx'
+import AdminCustomers from './pages/admin/AdminCustomers.jsx'
+import AdminCustomerDetail from './pages/admin/AdminCustomerDetail.jsx'
+import AdminReviews from './pages/admin/AdminReviews.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -99,6 +105,13 @@ export default function App() {
       >
         <Route index element={<AdminDashboard />} />
         <Route path="orders" element={<AdminOrders />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="products/new" element={<AdminProductForm />} />
+        <Route path="products/:id/edit" element={<AdminProductForm />} />
+        <Route path="categories" element={<AdminCategories />} />
+        <Route path="customers" element={<AdminCustomers />} />
+        <Route path="customers/:id" element={<AdminCustomerDetail />} />
+        <Route path="reviews" element={<AdminReviews />} />
       </Route>
       <Route path="/privacy-policy" element={<PolicyPage policy={POLICY_CONTENT.privacy} />} />
       <Route path="/terms-and-conditions" element={<PolicyPage policy={POLICY_CONTENT.terms} />} />

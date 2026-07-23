@@ -9,12 +9,9 @@ import { useCartStore } from '../store/useCartStore.js'
 import { useWishlistStore, selectIsWishlisted } from '../store/useWishlistStore.js'
 import { useProducts } from '../hooks/useProducts.js'
 import { useProduct } from '../hooks/useProduct.js'
-
-// Placeholder reviews until a real reviews API/table exists
-const MOCK_REVIEWS = [
-  { id: 1, name: 'Ayesha K.', rating: 5, comment: 'Fabric quality exceeded expectations, stitching is neat and true to size.' },
-  { id: 2, name: 'Bilal R.', rating: 4, comment: 'Great colour in person. Delivery took a day longer than estimated.' },
-]
+import { useReviews } from '../hooks/useReviews.js'
+import ReviewForm from '../components/product/ReviewForm.jsx'
+import { useAuthStore, selectIsAuthenticated } from '../store/useAuthStore.js'
 
 const ACCORDION_SECTIONS = [
   {
@@ -48,6 +45,9 @@ export default function ProductDetail() {
   const [openSection, setOpenSection] = useState(0)
   const [addedMessage, setAddedMessage] = useState(false)
 
+  const { reviews, averageRating, submitReview, refresh: refreshReviews } = useReviews(product?.id)
+  const isAuthenticated = useAuthStore(selectIsAuthenticated)
+
   // Related products — same category, excluding the current item.
   // TODO: replace with a real recommendation endpoint once one exists.
   const relatedParams = product ? { category: product.category, per_page: 5 } : null
@@ -73,7 +73,6 @@ export default function ProductDetail() {
   }
 
   const hasDiscount = Boolean(product.discountPrice)
-  const avgRating = MOCK_REVIEWS.reduce((sum, r) => sum + r.rating, 0) / MOCK_REVIEWS.length
   const activeSize = selectedSize ?? product.sizes?.[0] ?? null
   const activeColor = selectedColor ?? product.colors?.[0] ?? null
 
@@ -88,7 +87,7 @@ export default function ProductDetail() {
           <h1 className="mt-2 font-display text-display-md">{product.name}</h1>
 
           <div className="mt-3 flex items-center gap-3">
-            <RatingStars rating={avgRating} count={MOCK_REVIEWS.length} />
+            <RatingStars rating={averageRating} count={reviews.length} />
           </div>
 
           <div className="mt-4 flex items-center gap-3">
@@ -202,19 +201,30 @@ export default function ProductDetail() {
       </div>
 
       {/* Reviews */}
-      <section className="mt-20">
+      <section className="mt-20 max-w-2xl">
         <h2 className="mb-6 font-display text-2xl">Reviews</h2>
         <div className="space-y-6">
-          {MOCK_REVIEWS.map((review) => (
+          {reviews.length === 0 && (
+            <p className="text-sm text-stone">No reviews yet — be the first to share your thoughts.</p>
+          )}
+          {reviews.map((review) => (
             <div key={review.id} className="border-b border-stone-light/40 pb-6">
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium">{review.name}</span>
                 <RatingStars rating={review.rating} size={12} />
               </div>
-              <p className="mt-2 text-sm text-stone">{review.comment}</p>
+              {review.comment && <p className="mt-2 text-sm text-stone">{review.comment}</p>}
             </div>
           ))}
         </div>
+
+        <ReviewForm
+          isAuthenticated={isAuthenticated}
+          onSubmit={async (payload) => {
+            await submitReview(payload)
+            refreshReviews()
+          }}
+        />
       </section>
 
       {/* Frequently bought together */}
