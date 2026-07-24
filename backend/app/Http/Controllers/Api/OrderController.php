@@ -71,8 +71,23 @@ class OrderController extends Controller
                 $product->decrement('stock', $item['quantity']);
             }
 
-            // TODO: real coupon validation against a coupons table once it exists
+            // Coupon is validated and applied server-side — never trust a
+            // discount amount computed on the frontend, since that would let
+            // anyone fake an arbitrary discount at checkout.
             $discount = 0;
+            if (! empty($validated['coupon_code'])) {
+                $coupon = \App\Models\Coupon::where('code', strtoupper($validated['coupon_code']))->first();
+
+                if (! $coupon || $coupon->invalidReason($subtotal)) {
+                    throw ValidationException::withMessages([
+                        'coupon_code' => $coupon?->invalidReason($subtotal) ?? 'Invalid coupon code.',
+                    ]);
+                }
+
+                $discount = $coupon->calculateDiscount($subtotal);
+                $coupon->increment('times_used');
+            }
+
             $shipping = $subtotal >= 5000 ? 0 : 200;
             $total = $subtotal - $discount + $shipping;
 
