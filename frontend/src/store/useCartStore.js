@@ -10,6 +10,10 @@ export const useCartStore = create(
   persist(
     (set, get) => ({
       items: [], // { key, productId, slug, name, price, tone, size, color, quantity, stock }
+      coupon: null, // { code, type, value, discount } | null
+
+      setCoupon: (coupon) => set({ coupon }),
+      clearCoupon: () => set({ coupon: null }),
 
       addItem: (product, { size = null, color = null, quantity = 1 } = {}) => {
         const key = lineKey(product.id, size, color)
@@ -51,7 +55,7 @@ export const useCartStore = create(
           ),
         }),
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], coupon: null }),
     }),
     { name: 'sila-cart' }
   )

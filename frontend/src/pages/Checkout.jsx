@@ -25,6 +25,7 @@ export default function Checkout() {
   const navigate = useNavigate()
   const items = useCartStore((s) => s.items)
   const subtotal = useCartStore(selectCartSubtotal)
+  const appliedCoupon = useCartStore((s) => s.coupon)
   const clearCart = useCartStore((s) => s.clearCart)
 
   const [form, setForm] = useState({
@@ -36,7 +37,8 @@ export default function Checkout() {
   const [submitError, setSubmitError] = useState('')
 
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING
-  const total = subtotal + shipping
+  const discount = appliedCoupon?.discount ?? 0
+  const total = subtotal - discount + shipping
 
   function update(field, value) {
     setForm((f) => ({ ...f, [field]: value }))
@@ -72,6 +74,7 @@ export default function Checkout() {
         postal_code: form.postalCode,
         notes: form.notes || null,
         payment_method: form.payment,
+        coupon_code: appliedCoupon?.code ?? null,
         items: items.map((item) => ({
           product_id: item.productId,
           quantity: item.quantity,
@@ -208,6 +211,12 @@ export default function Checkout() {
               <span>Subtotal</span>
               <span>Rs. {subtotal.toLocaleString()}</span>
             </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-emerald">
+                <span>Discount {appliedCoupon?.code && `(${appliedCoupon.code})`}</span>
+                <span>-Rs. {discount.toLocaleString()}</span>
+              </div>
+            )}
             <div className="flex justify-between text-stone">
               <span>Shipping</span>
               <span>{shipping === 0 ? 'Free' : `Rs. ${shipping.toLocaleString()}`}</span>

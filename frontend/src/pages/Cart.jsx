@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { useCartStore, selectCartSubtotal } from '../store/useCartStore.js'
 import QuantitySelector from '../components/ui/QuantitySelector.jsx'
+import api from '../lib/api.js'
 
 const FREE_SHIPPING_THRESHOLD = 5000
 const FLAT_SHIPPING = 200
@@ -12,24 +13,32 @@ export default function Cart() {
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const removeItem = useCartStore((s) => s.removeItem)
   const subtotal = useCartStore(selectCartSubtotal)
+  const appliedCoupon = useCartStore((s) => s.coupon)
+  const setCoupon = useCartStore((s) => s.setCoupon)
+  const clearCoupon = useCartStore((s) => s.clearCoupon)
 
-  const [coupon, setCoupon] = useState('')
-  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [couponInput, setCouponInput] = useState('')
   const [couponError, setCouponError] = useState('')
+  const [checkingCoupon, setCheckingCoupon] = useState(false)
 
-  // TODO: replace with real coupon validation against the backend
-  function applyCoupon(e) {
+  async function applyCoupon(e) {
     e.preventDefault()
-    if (coupon.trim().toUpperCase() === 'SILA10') {
-      setAppliedCoupon({ code: 'SILA10', percent: 10 })
-      setCouponError('')
-    } else {
-      setAppliedCoupon(null)
-      setCouponError('Invalid or expired coupon code')
+    if (!couponInput.trim()) return
+    setCheckingCoupon(true)
+    setCouponError('')
+    try {
+      const res = await api.post('/coupons/validate', { code: couponInput.trim(), subtotal })
+      setCoupon(res.data.data)
+      setCouponInput('')
+    } catch (err) {
+      clearCoupon()
+      setCouponError(err.response?.data?.message || 'Invalid or expired coupon code')
+    } finally {
+      setCheckingCoupon(false)
     }
   }
 
-  const discount = appliedCoupon ? Math.round(subtotal * (appliedCoupon.percent / 100)) : 0
+  const discount = appliedCoupon?.discount ?? 0
   const shipping = subtotal === 0 || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING
   const tax = 0 // No sales tax applied at retail level currently — adjust here if that changes
   const total = subtotal - discount + shipping + tax
@@ -95,22 +104,25 @@ export default function Cart() {
           <form onSubmit={applyCoupon} className="mt-5 flex gap-2">
             <input
               type="text"
-              value={coupon}
-              onChange={(e) => setCoupon(e.target.value)}
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value)}
               placeholder="Coupon code"
-              className="w-full border border-stone-light/60 bg-transparent px-3 py-2 text-sm focus:border-emerald focus:outline-none"
+              disabled={checkingCoupon}
+              className="w-full border border-stone-light/60 bg-transparent px-3 py-2 text-sm focus:border-emerald focus:outline-none disabled:opacity-60"
             />
             <button
               type="submit"
-              className="shrink-0 border border-ink px-4 py-2 text-xs font-medium uppercase tracking-wide hover:bg-ink hover:text-ivory dark:border-ivory dark:hover:bg-ivory dark:hover:text-ink"
+              disabled={checkingCoupon}
+              className="shrink-0 border border-ink px-4 py-2 text-xs font-medium uppercase tracking-wide hover:bg-ink hover:text-ivory disabled:opacity-60 dark:border-ivory dark:hover:bg-ivory dark:hover:text-ink"
             >
-              Apply
+              {checkingCoupon ? 'Checking…' : 'Apply'}
             </button>
           </form>
           {couponError && <p className="mt-1.5 text-xs text-rani">{couponError}</p>}
           {appliedCoupon && (
             <p className="mt-1.5 text-xs text-emerald">
-              "{appliedCoupon.code}" applied — {appliedCoupon.percent}% off
+              "{appliedCoupon.code}" applied — Rs. {appliedCoupon.discount.toLocaleString()} off{' '}
+              <button type="button" onClick={clearCoupon} className="ml-1 underline">Remove</button>
             </p>
           )}
 

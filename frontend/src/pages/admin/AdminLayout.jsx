@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { label: 'Categories', to: '/admin/categories', ready: true },
   { label: 'Customers', to: '/admin/customers', ready: true },
   { label: 'Reviews', to: '/admin/reviews', ready: true },
-  { label: 'Coupons', to: '/admin/coupons', ready: false },
+  { label: 'Coupons', to: '/admin/coupons', ready: true },
   { label: 'Homepage & Banners', to: '/admin/homepage', ready: false },
   { label: 'Reports', to: '/admin/reports', ready: false },
 ]
