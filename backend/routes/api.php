@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Api\Admin\ReviewController as AdminReviewController;
+use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\Admin\CouponController as AdminCouponController;
@@ -43,6 +44,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::patch('/reviews/{review}/reject', [AdminReviewController::class, 'reject']);
     Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy']);
     Route::apiResource('coupons', AdminCouponController::class)->except(['show']);
+    Route::get('/reports/sales', [AdminReportController::class, 'sales']);
+    Route::get('/reports/inventory', [AdminReportController::class, 'inventory']);
 });
 
 Route::get('/products', [ProductController::class, 'index']);

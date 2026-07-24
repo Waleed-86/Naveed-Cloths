@@ -84,6 +84,16 @@ export default function Checkout() {
       })
 
       const order = response.data.data
+      const redirectUrl = response.data.redirect_url
+
+      if (redirectUrl) {
+        // Cart is intentionally NOT cleared here — payment isn't confirmed
+        // yet. If the customer cancels on Stripe's page and comes back,
+        // their cart should still be there to try again.
+        window.location.href = redirectUrl
+        return
+      }
+
       clearCart()
       navigate(`/order-confirmation/${order.order_number}`, {
         state: { orderNumber: order.order_number, total: Number(order.total), form },

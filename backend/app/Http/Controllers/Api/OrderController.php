@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\Payment\PaymentGatewayFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -71,10 +72,12 @@ class OrderController extends Controller
                 $product->decrement('stock', $item['quantity']);
             }
 
-            // Coupon is validated and applied server-side — never trust a
-            // discount amount computed on the frontend, since that would let
-            // anyone fake an arbitrary discount at checkout.
+            // Coupon is validated server-side — never trust a discount
+            // amount computed on the frontend. Usage count is only
+            // incremented later, once payment actually succeeds — a failed
+            // charge shouldn't burn a customer's coupon use.
             $discount = 0;
+            $coupon = null;
             if (! empty($validated['coupon_code'])) {
                 $coupon = \App\Models\Coupon::where('code', strtoupper($validated['coupon_code']))->first();
 
@@ -85,7 +88,6 @@ class OrderController extends Controller
                 }
 
                 $discount = $coupon->calculateDiscount($subtotal);
-                $coupon->increment('times_used');
             }
 
             $shipping = $subtotal >= 5000 ? 0 : 200;
@@ -116,10 +118,34 @@ class OrderController extends Controller
                 $order->items()->create($line);
             }
 
+            // Charge through the abstraction layer — OrderController has no
+            // idea whether this is COD, a bank transfer, or Stripe under the
+            // hood, and never will; that's the whole point of the gateway
+            // interface. A hard failure here rolls back this entire
+            // transaction (order, items, and stock decrement all undone),
+            // since we never want a "confirmed" order behind a payment that
+            // didn't actually go through.
+            $gateway = PaymentGatewayFactory::make($validated['payment_method']);
+            $result = $gateway->charge($order);
+
+            if (! $result->successful) {
+                throw ValidationException::withMessages(['payment_method' => $result->message]);
+            }
+
+            $order->update(['payment_status' => $result->paymentStatus]);
+            $coupon?->increment('times_used');
+
+            // Stashed as a transient attribute (not persisted) purely so the
+            // redirect URL can reach the HTTP response below.
+            $order->redirect_url = $result->redirectUrl;
+
             return $order;
         });
 
-        return response()->json(['data' => $order->load('items')], 201);
+        return response()->json([
+            'data' => $order->load('items'),
+            'redirect_url' => $order->redirect_url,
+        ], 201);
     }
 
     public function index(Request $request)

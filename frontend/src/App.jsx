@@ -34,6 +34,7 @@ import AdminCustomers from './pages/admin/AdminCustomers.jsx'
 import AdminCustomerDetail from './pages/admin/AdminCustomerDetail.jsx'
 import AdminReviews from './pages/admin/AdminReviews.jsx'
 import AdminCoupons from './pages/admin/AdminCoupons.jsx'
+import AdminReports from './pages/admin/AdminReports.jsx'
 
 // Temporary placeholder — each route below will be swapped for its real
 // page component as we build them out, one confirmed file at a time.
@@ -114,6 +115,7 @@ export default function App() {
         <Route path="customers/:id" element={<AdminCustomerDetail />} />
         <Route path="reviews" element={<AdminReviews />} />
         <Route path="coupons" element={<AdminCoupons />} />
+        <Route path="reports" element={<AdminReports />} />
       </Route>
       <Route path="/privacy-policy" element={<PolicyPage policy={POLICY_CONTENT.privacy} />} />
       <Route path="/terms-and-conditions" element={<PolicyPage policy={POLICY_CONTENT.terms} />} />
