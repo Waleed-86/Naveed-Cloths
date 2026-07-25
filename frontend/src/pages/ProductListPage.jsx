@@ -1,11 +1,13 @@
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import { useProducts } from '../hooks/useProducts.js'
+import Seo from '../components/seo/Seo.jsx'
 
-export default function ProductListPage({ title, subtitle, apiParams }) {
+export default function ProductListPage({ title, subtitle, apiParams, seoPath, seoDescription }) {
   const { products, loading, error } = useProducts({ per_page: 24, ...apiParams })
 
   return (
     <div className="container-premium py-12">
+      <Seo title={title} description={seoDescription} path={seoPath} />
       <p className="eyebrow">Collection</p>
       <h1 className="mt-2 font-display text-display-md">{title}</h1>
       {subtitle && <p className="mt-3 max-w-lg text-sm text-stone">{subtitle}</p>}

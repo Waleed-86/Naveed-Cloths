@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore.js'
+import Seo from '../../components/seo/Seo.jsx'
 
 const NAV_ITEMS = [
   { label: 'Profile', to: '/account', end: true },
@@ -20,6 +21,7 @@ export default function AccountLayout() {
 
   return (
     <div className="container-premium grid gap-10 py-12 lg:grid-cols-[220px_1fr]">
+      <Seo title="My Account" path="/account" noindex />
       <aside>
         <p className="eyebrow">My Account</p>
         <p className="mt-2 font-display text-xl">{user?.name}</p>

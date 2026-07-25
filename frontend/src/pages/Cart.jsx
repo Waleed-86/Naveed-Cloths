@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { useCartStore, selectCartSubtotal } from '../store/useCartStore.js'
 import QuantitySelector from '../components/ui/QuantitySelector.jsx'
+import Seo from '../components/seo/Seo.jsx'
 import api from '../lib/api.js'
 
 const FREE_SHIPPING_THRESHOLD = 5000
@@ -46,6 +47,7 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <div className="container-premium flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+        <Seo title="Your Cart" path="/cart" noindex />
         <h1 className="font-display text-2xl">Your cart is empty</h1>
         <p className="text-sm text-stone">Looks like you haven't added anything yet.</p>
         <Link to="/" className="bg-emerald px-8 py-3 text-sm font-medium uppercase tracking-wide text-ivory hover:bg-emerald-light">
@@ -57,6 +59,7 @@ export default function Cart() {
 
   return (
     <div className="container-premium py-12">
+      <Seo title="Your Cart" path="/cart" noindex />
       <h1 className="font-display text-display-md">Your Cart</h1>
       <div className="thread-divider my-6 max-w-[100px]" />
 

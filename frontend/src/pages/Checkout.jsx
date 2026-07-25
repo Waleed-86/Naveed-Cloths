@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useCartStore, selectCartSubtotal } from '../store/useCartStore.js'
 import FormInput, { FormField } from '../components/ui/FormInput.jsx'
 import api from '../lib/api.js'
+import Seo from '../components/seo/Seo.jsx'
 
 const PROVINCES = ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa', 'Balochistan', 'Gilgit-Baltistan', 'Azad Kashmir', 'Islamabad Capital Territory']
 
@@ -113,6 +114,7 @@ export default function Checkout() {
   if (items.length === 0) {
     return (
       <div className="container-premium flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+        <Seo title="Checkout" path="/checkout" noindex />
         <h1 className="font-display text-2xl">Nothing to check out</h1>
         <Link to="/" className="bg-emerald px-8 py-3 text-sm font-medium uppercase tracking-wide text-ivory hover:bg-emerald-light">
           Continue Shopping
@@ -123,6 +125,7 @@ export default function Checkout() {
 
   return (
     <div className="container-premium py-12">
+      <Seo title="Checkout" path="/checkout" noindex />
       <h1 className="font-display text-display-md">Checkout</h1>
       <div className="thread-divider my-6 max-w-[100px]" />
 

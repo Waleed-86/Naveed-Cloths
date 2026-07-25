@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore.js'
+import Seo from '../../components/seo/Seo.jsx'
 
 const NAV_ITEMS = [
   { label: 'Overview', to: '/admin', end: true, ready: true },
@@ -25,6 +26,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-ivory-deep dark:bg-ink">
+      <Seo title="Admin" path="/admin" noindex />
       <div className="grid lg:grid-cols-[240px_1fr]">
         <aside className="border-b border-stone-light/40 bg-ivory p-6 dark:bg-ink-soft lg:min-h-screen lg:border-b-0 lg:border-r">
           <Link to="/admin" className="font-display text-xl">SILA <span className="text-stone">Admin</span></Link>
