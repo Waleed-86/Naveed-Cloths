@@ -19,9 +19,42 @@ export default function AdminProductForm() {
   const { categories } = useCategories()
 
   const [form, setForm] = useState(EMPTY_FORM)
+  const [images, setImages] = useState([])
+  const [uploading, setUploading] = useState(false)
   const [loading, setLoading] = useState(isEditing)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+
+  async function handleImageUpload(e) {
+    const file = e.target.files?.[0]
+    if (!file || !id) return
+
+    setUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('image', file)
+      const res = await api.post(`/admin/products/${id}/images`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setImages((prev) => [...prev, res.data.data])
+    } catch {
+      setError('Failed to upload image.')
+    } finally {
+      setUploading(false)
+      e.target.value = ''
+    }
+  }
+
+  async function handleSetPrimary(imageId) {
+    const res = await api.patch(`/admin/products/${id}/images/${imageId}/primary`)
+    setImages(res.data.data)
+  }
+
+  async function handleDeleteImage(imageId) {
+    if (!confirm('Delete this image?')) return
+    await api.delete(`/admin/products/${id}/images/${imageId}`)
+    setImages((prev) => prev.filter((img) => img.id !== imageId))
+  }
 
   useEffect(() => {
     if (!isEditing) return
@@ -51,6 +84,7 @@ export default function AdminProductForm() {
           is_best_seller: Boolean(p.is_best_seller),
           is_active: Boolean(p.is_active),
         })
+        setImages(p.images ?? [])
       })
       .catch(() => setError('Could not load this product.'))
       .finally(() => setLoading(false))
@@ -215,6 +249,36 @@ export default function AdminProductForm() {
             Active (visible on storefront)
           </label>
         </div>
+
+        {isEditing && (
+          <div>
+            <label className="mb-1.5 block text-xs uppercase tracking-wide text-stone">Product Images</label>
+            <div className="flex flex-wrap gap-3">
+              {images.map((img) => (
+                <div key={img.id} className="relative h-24 w-20 shrink-0 overflow-hidden border border-stone-light/40">
+                  <img src={img.image_path} alt={img.alt_text} className="h-full w-full object-cover" />
+                  {img.is_primary && (
+                    <span className="absolute left-0 top-0 bg-emerald px-1.5 py-0.5 text-[9px] uppercase text-ivory">Primary</span>
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 flex justify-between bg-ink/70 px-1 py-0.5">
+                    {!img.is_primary && (
+                      <button type="button" onClick={() => handleSetPrimary(img.id)} className="text-[9px] text-ivory hover:underline">
+                        Set primary
+                      </button>
+                    )}
+                    <button type="button" onClick={() => handleDeleteImage(img.id)} className="ml-auto text-[9px] text-rani hover:underline">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <label className="flex h-24 w-20 shrink-0 cursor-pointer flex-col items-center justify-center border border-dashed border-stone-light/60 text-center text-[10px] text-stone hover:border-emerald">
+                {uploading ? 'Uploading…' : '+ Add Image'}
+                <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="hidden" />
+              </label>
+            </div>
+          </div>
+        )}
 
         {error && <p className="text-sm text-rani">{error}</p>}
 

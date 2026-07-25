@@ -24,6 +24,11 @@ class ProductController extends Controller
         return response()->json($query->latest()->paginate($request->integer('per_page', 20)));
     }
 
+    public function show(Product $product)
+    {
+        return response()->json(['data' => $product->load(['category', 'images'])]);
+    }
+
     public function store(Request $request)
     {
         $validated = $this->validated($request);
