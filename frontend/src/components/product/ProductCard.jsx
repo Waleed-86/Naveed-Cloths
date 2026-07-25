@@ -34,7 +34,14 @@ export default function ProductCard({ product }) {
   return (
     <Link to={`/product/${product.slug}`} className="group block">
       {/* Image area — placeholder color block until real product photography exists */}
-      <div className={`relative aspect-[3/4] overflow-hidden bg-gradient-to-br ${product.tone}`}>
+      <div className={`relative aspect-[3/4] overflow-hidden ${product.images?.length ? 'bg-ivory-deep' : `bg-gradient-to-br ${product.tone}`}`}>
+        {product.images?.length > 0 && (
+          <img
+            src={product.images[0].url}
+            alt={product.images[0].alt_text || product.name}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         {/* Badges */}
         <div className="absolute left-3 top-3 z-10 flex flex-col gap-1.5">
           {product.isNew && (

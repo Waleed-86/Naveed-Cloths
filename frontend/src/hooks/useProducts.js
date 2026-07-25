@@ -27,7 +27,7 @@ export const WORK_LABELS = { simple_printed: 'Simple Printed', embroidered: 'Emb
 // Normalizes the Laravel API's snake_case shape into the camelCase shape
 // ProductCard/ProductDetail/ProductGrid already expect (matching the old
 // mockProducts.js shape), so those components don't need to change.
-export export function normalizeProduct(p) {
+export function normalizeProduct(p) {
   return {
     id: p.id,
     slug: p.slug,
@@ -44,6 +44,7 @@ export export function normalizeProduct(p) {
     sizes: p.sizes ?? [],
     stock: p.stock,
     isNew: p.is_new,
+    images: (p.images ?? []).sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0)),
     tone: inferTone(p.id),
   }
 }

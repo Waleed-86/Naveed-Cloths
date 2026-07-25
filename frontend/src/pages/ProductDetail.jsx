@@ -80,7 +80,7 @@ export default function ProductDetail() {
     <div className="container-premium py-10">
       {/* Gallery + Info */}
       <div className="grid gap-12 lg:grid-cols-2">
-        <ImageGallery tone={product.tone} name={product.name} />
+        <ImageGallery tone={product.tone} name={product.name} images={product.images} />
 
         <div>
           <p className="eyebrow">{product.quality || product.work}</p>
