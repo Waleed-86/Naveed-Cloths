@@ -8,6 +8,7 @@ import QuantitySelector from '../components/ui/QuantitySelector.jsx'
 import { useCartStore } from '../store/useCartStore.js'
 import { useWishlistStore, selectIsWishlisted } from '../store/useWishlistStore.js'
 import { useProducts } from '../hooks/useProducts.js'
+import Seo from '../components/seo/Seo.jsx'
 import { useProduct } from '../hooks/useProduct.js'
 import { useReviews } from '../hooks/useReviews.js'
 import ReviewForm from '../components/product/ReviewForm.jsx'
@@ -78,6 +79,12 @@ export default function ProductDetail() {
 
   return (
     <div className="container-premium py-10">
+      <Seo
+        title={product.name}
+        description={`${product.name} — ${product.fabric ? product.fabric + '. ' : ''}Shop premium Pakistani fashion at SILA, delivered nationwide.`}
+        path={`/product/${product.slug}`}
+        image={product.images?.[0]?.url}
+      />
       {/* Gallery + Info */}
       <div className="grid gap-12 lg:grid-cols-2">
         <ImageGallery tone={product.tone} name={product.name} images={product.images} />

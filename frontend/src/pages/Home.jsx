@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import { useProducts } from '../hooks/useProducts.js'
+import Seo from '../components/seo/Seo.jsx'
 
 const CATEGORIES = [
   {
@@ -28,6 +29,7 @@ export default function Home() {
 
   return (
     <div>
+      <Seo path="/" />
       {/* Hero */}
       <section className="relative overflow-hidden bg-ivory-deep dark:bg-ink-soft">
         <div className="container-premium grid min-h-[85vh] items-center gap-12 py-16 lg:grid-cols-2 lg:py-0">

@@ -1,5 +1,6 @@
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import { useProducts } from '../hooks/useProducts.js'
+import Seo from '../components/seo/Seo.jsx'
 
 const TIERS = ['Premium Quality', 'Medium Quality', 'Budget Friendly']
 
@@ -8,6 +9,11 @@ export default function Men() {
 
   return (
     <div>
+      <Seo
+        title="Men's Collection"
+        description="Shop premium, medium, and budget-friendly men's Pakistani fashion — kurtas, shalwar kameez, and more. Nationwide delivery."
+        path="/men"
+      />
       <div className="container-premium pt-12">
         <p className="eyebrow">Collection</p>
         <h1 className="mt-2 font-display text-display-md">Men's Collection</h1>

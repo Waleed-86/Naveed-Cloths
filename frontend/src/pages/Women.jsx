@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import { useProducts, PIECE_VALUES, STITCH_VALUES, WORK_VALUES } from '../hooks/useProducts.js'
+import Seo from '../components/seo/Seo.jsx'
 
 const STEPS = [
   { key: 'pieces', question: 'Choose your piece count', options: ['2 Piece', '3 Piece'] },
@@ -38,6 +39,11 @@ export default function Women() {
 
   return (
     <div className="container-premium py-12">
+      <Seo
+        title="Women's Collection"
+        description="Shop 2-piece and 3-piece stitched or unstitched Pakistani suits — printed and embroidered. Nationwide delivery."
+        path="/women"
+      />
       <p className="eyebrow">Collection</p>
       <h1 className="mt-2 font-display text-display-md">Women's Collection</h1>
       <p className="mt-3 max-w-lg text-sm text-stone">
