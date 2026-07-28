@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Instagram, Facebook, Twitter } from 'lucide-react'
 
 const COLUMNS = [
   {
@@ -83,13 +82,21 @@ export default function Footer() {
             </p>
             <div className="mt-5 flex gap-3">
               <a href="#" aria-label="Instagram" className="rounded-full border border-ivory/25 p-2 hover:border-gold hover:text-gold">
-                <Instagram size={16} strokeWidth={1.5} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="2" y="2" width="20" height="20" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
               </a>
               <a href="#" aria-label="Facebook" className="rounded-full border border-ivory/25 p-2 hover:border-gold hover:text-gold">
-                <Facebook size={16} strokeWidth={1.5} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v3H7v4h3v7h4v-7h3l1-4h-4V9c0-.6.4-1 1-1z" />
+                </svg>
               </a>
               <a href="#" aria-label="Twitter" className="rounded-full border border-ivory/25 p-2 hover:border-gold hover:text-gold">
-                <Twitter size={16} strokeWidth={1.5} />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1-.8-.8-1.8-1.3-3-1.3-2.3 0-4.1 1.9-4.1 4.1 0 .3 0 .6.1.9-3.4-.2-6.5-1.8-8.5-4.3-.4.6-.6 1.3-.6 2.1 0 1.4.7 2.6 1.8 3.4-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4-.3.1-.7.1-1.1.1-.3 0-.5 0-.8-.1.5 1.6 2 2.8 3.8 2.8-1.4 1.1-3.2 1.7-5.1 1.7-.3 0-.7 0-1-.1 1.8 1.2 4 1.8 6.3 1.8 7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z" />
+                </svg>
               </a>
             </div>
           </div>
