@@ -34,7 +34,7 @@ export default function Register() {
   return (
     <div className="container-premium flex min-h-[70vh] items-center justify-center py-16">
       <div className="w-full max-w-sm">
-        <p className="eyebrow text-center">Join SILA</p>
+        <p className="eyebrow text-center">Join Naveed Cloths</p>
         <h1 className="mt-2 text-center font-display text-display-md">Create Account</h1>
         <div className="thread-divider mx-auto my-6 max-w-[100px]" />
 

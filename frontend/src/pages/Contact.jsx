@@ -28,25 +28,25 @@ export default function Contact() {
             <Mail size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-emerald" />
             <div>
               <p className="text-sm font-medium">Email</p>
-              <p className="text-sm text-stone">support@sila.pk</p>
+              <p className="text-sm text-stone">support@naveedcloths.pk</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Phone size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-emerald" />
             <div>
               <p className="text-sm font-medium">Phone</p>
-              <p className="text-sm text-stone">+92 300 1234567</p>
+              <p className="text-sm text-stone">+92 3455557126</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <MapPin size={18} strokeWidth={1.5} className="mt-0.5 shrink-0 text-emerald" />
             <div>
-              <p className="text-sm font-medium">Studio</p>
-              <p className="text-sm text-stone">Gulberg III, Lahore, Pakistan</p>
+              <p className="text-sm font-medium">Khaki</p>
+              <p className="text-sm text-stone">Nawab Khan Market , Hafiz Cloths</p>
             </div>
           </div>
           <p className="text-xs text-stone">
-            Support hours: Monday–Saturday, 10am–7pm PKT
+            Support hours: Monday–Saturday, 9am–7pm PKT
           </p>
         </div>
 

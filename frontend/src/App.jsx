@@ -65,7 +65,7 @@ export default function App() {
       <Route path="/women" element={<Women />} />
       <Route
         path="/new-arrivals"
-        element={<ProductListPage title="New Arrivals" subtitle="Just landed — the newest additions to our collections." apiParams={{ is_new: 1 }} seoPath="/new-arrivals" seoDescription="Shop the newest arrivals at SILA — fresh Pakistani fashion for men and women, delivered nationwide." />}
+        element={<ProductListPage title="New Arrivals" subtitle="Just landed — the newest additions to our collections." apiParams={{ is_new: 1 }} seoPath="/new-arrivals" seoDescription="Shop the newest arrivals at Naveed Cloths — fresh Pakistani fashion for men and women, delivered nationwide." />}
       />
       <Route
         path="/best-sellers"
@@ -73,7 +73,7 @@ export default function App() {
       />
       <Route
         path="/sale"
-        element={<ProductListPage title="Sale" subtitle="Limited-time offers on select collections." apiParams={{ on_sale: 1 }} seoPath="/sale" seoDescription="Shop discounted Pakistani fashion at SILA — limited-time offers while stock lasts." />}
+        element={<ProductListPage title="Sale" subtitle="Limited-time offers on select collections." apiParams={{ on_sale: 1 }} seoPath="/sale" seoDescription="Shop discounted Pakistani fashion at Naveed Cloths — limited-time offers while stock lasts." />}
       />
       <Route path="/product/:slug" element={<ProductDetail />} />
       <Route path="/about" element={<About />} />

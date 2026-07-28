@@ -48,7 +48,7 @@ export default function TrackOrder() {
             required
             value={orderNumber}
             onChange={(e) => setOrderNumber(e.target.value)}
-            placeholder="SILA-260722-A1B2C"
+            placeholder="NC-260722-A1B2C"
           />
         </FormField>
         {!isAuthenticated && (

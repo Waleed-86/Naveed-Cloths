@@ -76,7 +76,7 @@ export default function Footer() {
         {/* Link columns */}
         <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
           <div>
-            <Link to="/" className="font-display text-2xl">SILA</Link>
+            <Link to="/" className="font-display text-2xl">Naveed Cloths</Link>
             <p className="mt-3 max-w-[220px] text-sm text-ivory/70">
               Premium Pakistani fashion, stitched with intention — from our house to yours.
             </p>
@@ -120,7 +120,7 @@ export default function Footer() {
 
       <div className="border-t border-ivory/15">
         <div className="container-premium flex flex-col items-center justify-between gap-3 py-6 text-xs text-ivory/60 md:flex-row">
-          <p>© {new Date().getFullYear()} SILA. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Naveed Cloths. All rights reserved.</p>
           <p>Cash on Delivery · JazzCash · Easypaisa · Bank Transfer · Cards</p>
         </div>
       </div>

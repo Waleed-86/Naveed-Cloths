@@ -29,7 +29,7 @@ export default function AdminLayout() {
       <Seo title="Admin" path="/admin" noindex />
       <div className="grid lg:grid-cols-[240px_1fr]">
         <aside className="border-b border-stone-light/40 bg-ivory p-6 dark:bg-ink-soft lg:min-h-screen lg:border-b-0 lg:border-r">
-          <Link to="/admin" className="font-display text-xl">SILA <span className="text-stone">Admin</span></Link>
+          <Link to="/admin" className="font-display text-xl">Naveed Cloths <span className="text-stone">Admin</span></Link>
           <p className="mt-1 text-xs text-stone">{user?.name}</p>
 
           <nav className="mt-8 flex flex-col gap-1">

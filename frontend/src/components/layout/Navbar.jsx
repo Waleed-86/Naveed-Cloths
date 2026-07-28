@@ -54,8 +54,8 @@ export default function Navbar() {
       >
         <div className="container-premium flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
-          <Link to="/" className="thread-underline font-display text-2xl font-medium tracking-tight md:text-3xl">
-            SILA
+          <Link to="/" className="thread-underline shrink-0 whitespace-nowrap font-display text-lg font-medium tracking-tight md:text-xl">
+            Naveed Cloths
           </Link>
 
           {/* Desktop nav */}
@@ -90,9 +90,12 @@ export default function Navbar() {
             <Link
               to={isAuthenticated ? '/account' : '/login'}
               aria-label={isAuthenticated ? 'Account' : 'Sign in'}
-              className="hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex"
+              className="flex items-center gap-1.5 rounded-full px-2 py-2 hover:bg-ivory-deep dark:hover:bg-ink-soft lg:px-3"
             >
               <User size={20} strokeWidth={1.5} />
+              <span className="hidden text-xs font-medium uppercase tracking-wide lg:inline">
+                {isAuthenticated ? 'Account' : 'Login'}
+              </span>
             </Link>
             <Link to="/wishlist" aria-label="Wishlist" className="relative hidden rounded-full p-2 hover:bg-ivory-deep dark:hover:bg-ink-soft md:inline-flex">
               <Heart size={20} strokeWidth={1.5} />
@@ -144,8 +147,12 @@ export default function Navbar() {
                 </NavLink>
               ))}
               <div className="thread-divider my-2" />
-              <Link to="/account" onClick={() => setMobileOpen(false)} className="text-sm uppercase tracking-wide text-stone">
-                Account
+              <Link
+                to={isAuthenticated ? '/account' : '/login'}
+                onClick={() => setMobileOpen(false)}
+                className="text-sm uppercase tracking-wide text-stone"
+              >
+                {isAuthenticated ? 'My Account' : 'Login'}
               </Link>
               <Link to="/wishlist" onClick={() => setMobileOpen(false)} className="text-sm uppercase tracking-wide text-stone">
                 Wishlist

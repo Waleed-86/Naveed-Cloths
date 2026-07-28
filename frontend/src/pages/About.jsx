@@ -3,12 +3,12 @@ export default function About() {
     <div className="container-premium py-16">
       <div className="max-w-2xl">
         <p className="eyebrow">Our Story</p>
-        <h1 className="mt-2 font-display text-display-md">About SILA</h1>
+        <h1 className="mt-2 font-display text-display-md">About Naveed Cloths</h1>
         <div className="thread-divider my-6 max-w-[100px]" />
 
         <div className="space-y-5 text-sm leading-relaxed text-stone">
           <p>
-            SILA began as a single tailoring counter, built on the belief that
+            Naveed Cloths began as a single tailoring counter, built on the belief that
             clothing should feel considered — fabric chosen with intent, cuts
             that respect how people actually move through their day, and
             embroidery that means something rather than decorating for its

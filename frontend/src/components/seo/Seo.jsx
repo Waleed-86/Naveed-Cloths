@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 
-const SITE_NAME = 'SILA'
+const SITE_NAME = 'Naveed Cloths'
 const DEFAULT_DESCRIPTION = 'Premium Pakistani fashion for men and women — from everyday essentials to fully embroidered formal wear, delivered nationwide.'
-const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://sila.pk'
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://naveedcloths.pk'
 
 export default function Seo({ title, description = DEFAULT_DESCRIPTION, path = '', image, noindex = false }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Premium Pakistani Fashion`

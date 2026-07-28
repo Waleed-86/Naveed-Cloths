@@ -81,7 +81,7 @@ export default function ProductDetail() {
     <div className="container-premium py-10">
       <Seo
         title={product.name}
-        description={`${product.name} — ${product.fabric ? product.fabric + '. ' : ''}Shop premium Pakistani fashion at SILA, delivered nationwide.`}
+        description={`${product.name} — ${product.fabric ? product.fabric + '. ' : ''}Shop premium Pakistani fashion at Naveed Cloths, delivered nationwide.`}
         path={`/product/${product.slug}`}
         image={product.images?.[0]?.url}
       />

@@ -9,7 +9,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_number' => 'SILA-'.fake()->unique()->numerify('######'),
+            'order_number' => 'NC-'.fake()->unique()->numerify('######'),
             'full_name' => fake()->name(),
             'phone' => '0300'.fake()->numerify('#######'),
             'email' => fake()->safeEmail(),
