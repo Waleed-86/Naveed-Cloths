@@ -26,6 +26,7 @@ Route::get('/orders/{orderNumber}', [OrderController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/me/password', [AuthController::class, 'updatePassword']);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::post('/products/{product}/reviews', [ReviewController::class, 'store']);
 });

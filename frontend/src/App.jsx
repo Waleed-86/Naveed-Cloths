@@ -15,7 +15,8 @@ import OrderConfirmation from './pages/OrderConfirmation.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import RequireAuth from './components/auth/RequireAuth.jsx'
-import AccountLayout, { AddressesPlaceholder, ChangePasswordPlaceholder } from './pages/account/AccountLayout.jsx'
+import AccountLayout, { AddressesPlaceholder } from './pages/account/AccountLayout.jsx'
+import ChangePassword from './pages/account/ChangePassword.jsx'
 import Profile from './pages/account/Profile.jsx'
 import Orders from './pages/account/Orders.jsx'
 import TrackOrder from './pages/TrackOrder.jsx'
@@ -95,7 +96,7 @@ export default function App() {
         <Route index element={<Profile />} />
         <Route path="orders" element={<Orders />} />
         <Route path="addresses" element={<AddressesPlaceholder />} />
-        <Route path="change-password" element={<ChangePasswordPlaceholder />} />
+        <Route path="change-password" element={<ChangePassword />} />
       </Route>
       <Route
         path="/admin"
