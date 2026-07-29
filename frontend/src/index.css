@@ -1,23 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap');
 @import url('https://fonts.cdnfonts.com/css/general-sans');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Brand palette — deep jewel tones drawn from bridal/formal fabric */
-  --color-ink: #1C1A1E;
-  --color-ink-soft: #2A2730;
-  --color-ivory: #FAF6F0;
-  --color-ivory-deep: #F0E9DD;
-  --color-emerald: #0F3D2E;
-  --color-emerald-light: #175943;
-  --color-emerald-dark: #0A2B20;
-  --color-gold: #B8925A;
-  --color-gold-light: #D4B888;
-  --color-gold-dark: #8F6D3F;
-  --color-rani: #7A1F3D;
-  --color-rani-light: #9C2C4F;
-  --color-stone: #8A8378;
-  --color-stone-light: #C4BEB2;
+  /* Brand palette v2 — brighter, more open, still premium */
+  --color-ink: #22202A;
+  --color-ink-soft: #2F2C38;
+  --color-ivory: #FDFBF8;
+  --color-ivory-deep: #F3EEE6;
+  --color-emerald: #10573F;
+  --color-emerald-light: #1B7A58;
+  --color-emerald-dark: #0A3D2C;
+  --color-gold: #C79A5E;
+  --color-gold-light: #E0C08E;
+  --color-gold-dark: #9C7640;
+  --color-rani: #8C2547;
+  --color-rani-light: #B33A63;
+  --color-stone: #86807A;
+  --color-stone-light: #D6D0C7;
 
   /* Typography */
   --font-display: "Fraunces", ui-serif, Georgia, serif;

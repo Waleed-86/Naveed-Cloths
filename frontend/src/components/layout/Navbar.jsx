@@ -20,7 +20,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDark, setIsDark] = useState(
-    () => typeof window !== 'undefined' && localStorage.getItem('theme') === 'dark'
+    () => typeof window !== 'undefined' && localStorage.getItem('theme-preference') === 'dark'
   )
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function Navbar() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    localStorage.setItem('theme-preference', isDark ? 'dark' : 'light')
   }, [isDark])
 
   useEffect(() => {

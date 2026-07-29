@@ -35,7 +35,7 @@ export default function Home() {
         <div className="container-premium grid min-h-[85vh] items-center gap-12 py-16 lg:grid-cols-2 lg:py-0">
           <div className="max-w-xl">
             <p className="eyebrow">New Season · 2026</p>
-            <h1 className="mt-4 font-display text-display-lg md:text-display-xl">
+            <h1 className="mt-4 font-display text-display-lg text-ink dark:text-ivory md:text-display-xl">
               Stitched with intention.
             </h1>
             <div className="thread-divider my-6 max-w-[140px]" />
