@@ -17,6 +17,8 @@ export default function Navbar() {
   const cartCount = useCartStore(selectCartCount)
   const wishlistCount = useWishlistStore(selectWishlistCount)
   const isAuthenticated = useAuthStore(selectIsAuthenticated)
+  const user = useAuthStore((s) => s.user)
+  const isAdmin = user?.role === 'admin'
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDark, setIsDark] = useState(
@@ -87,6 +89,14 @@ export default function Navbar() {
             >
               {isDark ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
             </button>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="hidden items-center rounded-full bg-emerald px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-ivory hover:bg-emerald-light md:inline-flex"
+              >
+                Admin
+              </Link>
+            )}
             <Link
               to={isAuthenticated ? '/account' : '/login'}
               aria-label={isAuthenticated ? 'Account' : 'Sign in'}
@@ -147,6 +157,15 @@ export default function Navbar() {
                 </NavLink>
               ))}
               <div className="thread-divider my-2" />
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm font-semibold uppercase tracking-wide text-emerald"
+                >
+                  Admin Dashboard
+                </Link>
+              )}
               <Link
                 to={isAuthenticated ? '/account' : '/login'}
                 onClick={() => setMobileOpen(false)}

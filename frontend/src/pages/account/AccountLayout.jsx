@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/useAuthStore.js'
 import Seo from '../../components/seo/Seo.jsx'
 
@@ -25,6 +25,14 @@ export default function AccountLayout() {
       <aside>
         <p className="eyebrow">My Account</p>
         <p className="mt-2 font-display text-xl">{user?.name}</p>
+        {user?.role === 'admin' && (
+          <Link
+            to="/admin"
+            className="mt-3 inline-block bg-emerald px-4 py-2 text-xs font-semibold uppercase tracking-wide text-ivory hover:bg-emerald-light"
+          >
+            Go to Admin Dashboard →
+          </Link>
+        )}
         <nav className="mt-6 flex flex-col gap-1">
           {NAV_ITEMS.map((item) => (
             <NavLink
