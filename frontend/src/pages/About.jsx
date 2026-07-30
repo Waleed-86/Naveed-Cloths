@@ -8,39 +8,43 @@ export default function About() {
 
         <div className="space-y-5 text-sm leading-relaxed text-stone">
           <p>
-            Naveed Cloths began as a single tailoring counter, built on the belief that
-            clothing should feel considered — fabric chosen with intent, cuts
-            that respect how people actually move through their day, and
-            embroidery that means something rather than decorating for its
-            own sake.
+            Naveed Cloths opened its doors in 2017 in Nawab Khan Market,
+            Mansehra — and in the years since, what's kept our shutters up
+            has never been advertising or trends. It's been something
+            simpler: customers who come back, and who send their family and
+            friends to us too. That kind of trust isn't built overnight, and
+            we don't take it lightly.
           </p>
           <p>
-            Today that same philosophy carries through everything we make,
-            from everyday essentials to fully embroidered formal wear. Every
-            piece is inspected by hand before it reaches you, because a
-            garment that doesn't hold up isn't worth making in the first
-            place.
+            Every piece we stock is sourced from Pakistan's finest textile
+            mills — fabric chosen for how it wears, not just how it
+            photographs. We currently offer readymade suits rather than
+            custom tailoring, which means every size and cut you see is one
+            we've personally checked for quality before it reaches our
+            shelves.
           </p>
           <p>
-            We're proud to be a Pakistani brand, sourcing fabric locally
-            where we can and working with artisans who've spent years
-            perfecting their craft. Moving online doesn't change any of
-            that — it just means more people get to wear it.
+            Behind the counter, it's a two-man operation — Hafiz Naveed and
+            Aqib Anwar — which is really just another way of saying that
+            when you shop with us, you're dealing directly with the people
+            who care whether you're happy with your purchase, not a call
+            centre. Moving online doesn't change that; it just means more
+            people get to experience it.
           </p>
         </div>
 
         <div className="mt-10 grid grid-cols-3 gap-6 border-t border-stone-light/40 pt-8">
           <div>
-            <p className="font-display text-3xl text-emerald">10+</p>
-            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Years of craft</p>
+            <p className="font-display text-3xl text-emerald">2017</p>
+            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Est. in Mansehra</p>
           </div>
           <div>
-            <p className="font-display text-3xl text-emerald">50k+</p>
-            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Happy customers</p>
+            <p className="font-display text-3xl text-emerald">1000s</p>
+            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Customers served</p>
           </div>
           <div>
-            <p className="font-display text-3xl text-emerald">100%</p>
-            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Nationwide delivery</p>
+            <p className="font-display text-3xl text-emerald">2</p>
+            <p className="mt-1 text-xs uppercase tracking-wide text-stone">Brothers behind the counter</p>
           </div>
         </div>
       </div>
