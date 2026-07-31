@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CouponController;
+use App\Http\Controllers\Api\HomepageContentController;
+use App\Http\Controllers\Api\Admin\HomepageContentController as AdminHomepageContentController;
 use App\Http\Controllers\Api\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -51,6 +53,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::apiResource('coupons', AdminCouponController::class)->except(['show']);
     Route::get('/reports/sales', [AdminReportController::class, 'sales']);
     Route::get('/reports/inventory', [AdminReportController::class, 'inventory']);
+    Route::get('/homepage-content', [AdminHomepageContentController::class, 'show']);
+    Route::put('/homepage-content', [AdminHomepageContentController::class, 'update']);
 });
 
 Route::get('/products', [ProductController::class, 'index']);
@@ -58,5 +62,6 @@ Route::get('/products/{slug}', [ProductController::class, 'show']);
 Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
 
 Route::post('/coupons/validate', [CouponController::class, 'validateCode']);
+Route::get('/homepage-content', [HomepageContentController::class, 'show']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
