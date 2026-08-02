@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import ProductGrid from '../components/product/ProductGrid.jsx'
 import { useProducts } from '../hooks/useProducts.js'
 import Seo from '../components/seo/Seo.jsx'
+import { useHomepageContent } from '../hooks/useHomepageContent.js'
 
 const CATEGORIES = [
   {
@@ -26,6 +27,18 @@ const CATEGORIES = [
 
 export default function Home() {
   const { products: featured, loading } = useProducts({ is_new: 1, per_page: 4 })
+  const { content } = useHomepageContent()
+
+  const hero = {
+    eyebrow: content?.hero_eyebrow || 'Trusted Since 2017',
+    headline: content?.hero_headline || 'Quality you can trust.',
+    subheadline: content?.hero_subheadline || "Premium readymade suits for men and women, sourced from Pakistan's finest fabric mills — delivered nationwide from our store in Mansehra.",
+    ctaPrimaryLabel: content?.hero_cta_primary_label || 'Shop Women',
+    ctaPrimaryLink: content?.hero_cta_primary_link || '/women',
+    ctaSecondaryLabel: content?.hero_cta_secondary_label || 'Shop Men',
+    ctaSecondaryLink: content?.hero_cta_secondary_link || '/men',
+    featuredLabel: content?.hero_featured_label || 'A Decade of Trust',
+  }
 
   return (
     <div>
@@ -34,37 +47,36 @@ export default function Home() {
       <section className="relative overflow-hidden bg-ivory-deep dark:bg-ink-soft">
         <div className="container-premium grid min-h-[85vh] items-center gap-12 py-16 lg:grid-cols-2 lg:py-0">
           <div className="max-w-xl">
-            <p className="eyebrow">New Season · 2026</p>
+            <p className="eyebrow">{hero.eyebrow}</p>
             <h1 className="mt-4 font-display text-display-lg text-ink dark:text-ivory md:text-display-xl">
-              Stitched with intention.
+              {hero.headline}
             </h1>
             <div className="thread-divider my-6 max-w-[140px]" />
             <p className="max-w-md text-base text-ink/70 dark:text-ivory/70 md:text-lg">
-              Premium Pakistani fashion for men and women — from everyday
-              essentials to fully embroidered formal wear, delivered nationwide.
+              {hero.subheadline}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
-                to="/women"
+                to={hero.ctaPrimaryLink}
                 className="bg-emerald px-8 py-3.5 text-sm font-medium uppercase tracking-wide text-ivory transition-colors hover:bg-emerald-light"
               >
-                Shop Women
+                {hero.ctaPrimaryLabel}
               </Link>
               <Link
-                to="/men"
+                to={hero.ctaSecondaryLink}
                 className="border border-ink px-8 py-3.5 text-sm font-medium uppercase tracking-wide text-ink transition-colors hover:bg-ink hover:text-ivory dark:border-ivory dark:text-ivory dark:hover:bg-ivory dark:hover:text-ink"
               >
-                Shop Men
+                {hero.ctaSecondaryLabel}
               </Link>
             </div>
           </div>
 
           {/* Editorial panel — swap for real campaign photography when available */}
           <div className="relative hidden aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-emerald to-emerald-dark lg:flex">
-            <span className="font-display text-9xl text-gold/20">S</span>
+            <span className="font-display text-9xl text-gold/20">N</span>
             <div className="absolute bottom-8 left-8 right-8 border-t border-ivory/20 pt-4">
               <p className="text-xs uppercase tracking-widest2 text-ivory/70">Featured</p>
-              <p className="mt-1 font-display text-xl text-ivory">The Zardozi Edit</p>
+              <p className="mt-1 font-display text-xl text-ivory">{hero.featuredLabel}</p>
             </div>
           </div>
         </div>
