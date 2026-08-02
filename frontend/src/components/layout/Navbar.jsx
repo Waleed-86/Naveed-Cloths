@@ -4,6 +4,7 @@ import { Menu, X, Search, Heart, User, ShoppingBag, Sun, Moon } from 'lucide-rea
 import { useCartStore, selectCartCount } from '../../store/useCartStore.js'
 import { useWishlistStore, selectWishlistCount } from '../../store/useWishlistStore.js'
 import { useAuthStore, selectIsAuthenticated } from '../../store/useAuthStore.js'
+import { useHomepageContent } from '../../hooks/useHomepageContent.js'
 
 const NAV_LINKS = [
   { label: 'Men', to: '/men' },
@@ -19,6 +20,7 @@ export default function Navbar() {
   const isAuthenticated = useAuthStore(selectIsAuthenticated)
   const user = useAuthStore((s) => s.user)
   const isAdmin = user?.role === 'admin'
+  const { content: homepageContent } = useHomepageContent()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDark, setIsDark] = useState(
@@ -44,7 +46,7 @@ export default function Navbar() {
     <>
       {/* Announcement bar */}
       <div className="bg-emerald py-2 text-center text-xs tracking-wide text-ivory">
-        Free delivery on orders over Rs. 5,000 — nationwide
+        {homepageContent?.announcement_text || 'Free delivery on orders over Rs. 5,000 — nationwide'}
       </div>
 
       <header
