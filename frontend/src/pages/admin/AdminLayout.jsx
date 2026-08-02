@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: 'Customers', to: '/admin/customers', ready: true },
   { label: 'Reviews', to: '/admin/reviews', ready: true },
   { label: 'Coupons', to: '/admin/coupons', ready: true },
-  { label: 'Homepage & Banners', to: '/admin/homepage', ready: false },
+  { label: 'Homepage & Banners', to: '/admin/homepage', ready: true },
   { label: 'Reports', to: '/admin/reports', ready: true },
 ]
 
