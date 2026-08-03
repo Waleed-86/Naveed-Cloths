@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: 'Coupons', to: '/admin/coupons', ready: true },
   { label: 'Homepage & Banners', to: '/admin/homepage', ready: true },
   { label: 'Reports', to: '/admin/reports', ready: true },
+  { label: 'Security', to: '/admin/security', ready: true },
 ]
 
 export default function AdminLayout() {

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController
 use App\Http\Controllers\Api\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Api\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Api\Admin\SecurityController as AdminSecurityController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\HomepageContentController;
@@ -19,18 +20,20 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('throttle:auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
-Route::post('/orders', [OrderController::class, 'store']);
+Route::post('/orders', [OrderController::class, 'store'])->middleware('throttle:checkout');
 Route::get('/orders/{orderNumber}', [OrderController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
-    Route::put('/me/password', [AuthController::class, 'updatePassword']);
+    Route::put('/me/password', [AuthController::class, 'updatePassword'])->middleware('throttle:auth');
     Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/products/{product}/reviews', [ReviewController::class, 'store']);
+    Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->middleware('throttle:write');
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
@@ -55,13 +58,14 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/reports/inventory', [AdminReportController::class, 'inventory']);
     Route::get('/homepage-content', [AdminHomepageContentController::class, 'show']);
     Route::put('/homepage-content', [AdminHomepageContentController::class, 'update']);
+    Route::get('/security/login-attempts', [AdminSecurityController::class, 'loginAttempts']);
 });
 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{slug}', [ProductController::class, 'show']);
 Route::get('/products/{product}/reviews', [ReviewController::class, 'index']);
 
-Route::post('/coupons/validate', [CouponController::class, 'validateCode']);
+Route::post('/coupons/validate', [CouponController::class, 'validateCode'])->middleware('throttle:write');
 Route::get('/homepage-content', [HomepageContentController::class, 'show']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
