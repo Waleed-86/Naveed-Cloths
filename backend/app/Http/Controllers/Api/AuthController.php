@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoginAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -16,7 +18,7 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
         ]);
 
         $user = User::create([
@@ -38,9 +40,27 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        $ip = $request->ip();
+        $userAgent = $request->userAgent();
 
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+        // Check lockout BEFORE verifying the password, so a locked-out
+        // account can't be brute-forced further even if attempts keep
+        // arriving from different requests in the same window.
+        $lockoutMinutes = LoginAttempt::lockoutMinutesRemaining($credentials['email']);
+        if ($lockoutMinutes !== null) {
+            LoginAttempt::record($credentials['email'], $ip, $userAgent, false);
+
+            throw ValidationException::withMessages([
+                'email' => ["Too many failed login attempts. Please try again in {$lockoutMinutes} minute(s)."],
+            ]);
+        }
+
+        $user = User::where('email', $credentials['email'])->first();
+        $passwordCorrect = $user && Hash::check($credentials['password'], $user->password);
+
+        LoginAttempt::record($credentials['email'], $ip, $userAgent, $passwordCorrect);
+
+        if (! $passwordCorrect) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -67,7 +87,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->mixedCase()->numbers()],
         ]);
 
         $user = $request->user();
