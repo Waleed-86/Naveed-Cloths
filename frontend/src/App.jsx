@@ -13,6 +13,8 @@ import Wishlist from './pages/Wishlist.jsx'
 import Checkout from './pages/Checkout.jsx'
 import OrderConfirmation from './pages/OrderConfirmation.jsx'
 import Login from './pages/Login.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 import Register from './pages/Register.jsx'
 import RequireAuth from './components/auth/RequireAuth.jsx'
 import AccountLayout, { AddressesPlaceholder } from './pages/account/AccountLayout.jsx'
@@ -86,6 +88,8 @@ export default function App() {
       <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
       <Route path="/track-order" element={<TrackOrder />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/register" element={<Register />} />
       <Route
         path="/account"

@@ -47,6 +47,9 @@ export default function Login() {
               onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
             />
           </FormField>
+          <div className="-mt-2 text-right">
+            <Link to="/forgot-password" className="thread-underline text-xs text-stone">Forgot password?</Link>
+          </div>
 
           {error && <p className="text-sm text-rani">{error}</p>}
 
