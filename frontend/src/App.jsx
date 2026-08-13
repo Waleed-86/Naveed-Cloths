@@ -126,14 +126,3 @@ export default function App() {
         <Route path="homepage" element={<AdminHomepage />} />
         <Route path="security" element={<AdminSecurity />} />
       </Route>
-      <Route path="/privacy-policy" element={<PolicyPage policy={POLICY_CONTENT.privacy} />} />
-      <Route path="/terms-and-conditions" element={<PolicyPage policy={POLICY_CONTENT.terms} />} />
-      <Route path="/refund-policy" element={<PolicyPage policy={POLICY_CONTENT.refund} />} />
-      <Route path="/shipping-policy" element={<PolicyPage policy={POLICY_CONTENT.shipping} />} />
-      <Route path="*" element={<Placeholder label="404 — Page Not Found" />} />
-      </Routes>
-      <Footer />
-      <ScrollToTopButton />
-    </>
-  )
-}
